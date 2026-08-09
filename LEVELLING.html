@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Leveling Pro</title>
+    <meta name="theme-color" content="#000000">
+    <link rel="manifest" href='data:application/manifest+json;utf8,{"name":"Leveling Pro","short_name":"Leveling","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#000000","icons":[{"src":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAgAElEQVR4nO19B3hdVbWu7Y/TOe2WnUkmVTOZTSghdAg9gwjSq9IFQYIoFkVEAem9V5qAIkoRBUV4g4r0giCA9N5NJ5nU0nuZndncs+f68s+91+59z8n/x+HsnGvOteYss8y91lr77W+v3jXOOeecU9ZFF5100klnPf6jH/3oP7w2lK1bt069//77/+uoo45qBQAADz300K+ttNrKj/P08vVvPvjggz91vvvua3vuuedqAQAA8PTTT3/n008/fY+vvvrmb5577rmm//nPfx745z//ebm1tbf3k08++Y+vveaaW+64445H9r6+7bfffvtv//nPf8530EMPPfSb9ddff+8999xz87nnnvvnvv322yff999//8sHHngw+vv792nPPfbc//jHP/6T+9///vfnnn322d87++yz37v++ut/+dGPfvS3XvWqV0/7+uuv//mqq6767fff//5N/PCHP/6rB99zzz337Lvvvrs//PDD/11wwQV37bvvvvt//OMf/075yCOP3N94440PffOb33zjT37yk3/xL3/5y8effvqpB/fee+99N954471feeWVD95www0PfeELX/h9z7nnnnu3Z5999nv33ntv+9Wvf/3bf3j33Xff//jjj/8P3N3d7bvvvvvvvvnmO/+++9//73fffvf8888//9x99933+vrrr/+d999//5+vvPLKf/e999577w888MAzPfLII58888wz3/v98ssv/79vvPHGv/78888//4cffvgjM88888z7AwoPPPDAsz/4wQ/+748//vjPPXz44f/60EMP3fvvv//++9133333fv3rX//qgAED/v/f//73b//2t789/cc//vGPRx555JEXfPvb335//vnnn3/ggQceqPz3v/89fe65557761//+ts//PDD/4K1//77v//f//3f77PPPvt8L7/88r9w/vvff/8///vf//6bDz/88D+5/vrr73700Uf/v/fee+89cI8//vg3vv7661/89a9//fXHH3/8z//n//7v/3r22Wef+eeff/7H16+///77X3bvvffe//TTT//j699///33H//4xz9+yAcffPj//f3vv///v//977///vvv/99//vOf/99//vOfP///v//97///vvvff/89///vff/8//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//v//-=","sizes":"192x192","type":"image/svg+xml"}]}'>
+    
+    <style>
+        :root {
+            --bg-top: #000000;
+            --bg-bottom: #151b3b;
+            --surface: #282a2f;
+            --text-main: #ffffff;
+            --text-muted: #e0e2e8; 
+            --accent: #8ab4f8;
+            --error: #ff8a80;
+            --success: #69f0ae;
+            
+            /* High Contrast Colors for Sunlight Visibility */
+            --color-bm: #ffee58; /* Bright Yellow */
+            --color-stn: #ffa726; /* Bright Orange */
+            --color-bs: #69f0ae; /* Bright Green */
+            --color-is: #ff8a80; /* Bright Red */
+            --color-fs: #4fc3f7; /* Bright Blue */
+            --color-design: #e040fb; /* Bright Purple */
+            --color-hi: #ffffff; /* Pure White */
+            
+            --font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-family);
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px 20px 20px;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: #000000;
+            border: none;
+        }
+
+        .container {
+            flex: 1;
+            padding: 0 20px 30px;
+            display: none;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .container.active {
+            display: flex;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+        }
+
+        .input-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+        }
+
+        label {
+            font-size: 18px;
+            font-weight: 800;
+        }
+        
+        .lbl-bm { color: var(--color-bm); }
+        .lbl-stn { color: var(--color-stn); }
+        .lbl-bs { color: var(--color-bs); }
+        .lbl-is { color: var(--color-is); }
+        .lbl-fs { color: var(--color-fs); }
+        .lbl-design { color: var(--color-design); }
+
+        .clear-btn {
+            background: rgba(255, 138, 128, 0.2);
+            border: 1px solid var(--error);
+            color: var(--error);
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            padding: 5px 12px;
+        }
+
+        input {
+            background: #1e1e1e;
+            border: 2px solid #333;
+            padding: 16px 15px;
+            border-radius: 20px;
+            font-size: 24px; 
+            font-weight: 900;
+            outline: none;
+            width: 100%;
+        }
+        
+        input.inp-bm { color: var(--color-bm); border-color: rgba(255, 238, 88, 0.3); }
+        input.inp-stn { color: var(--color-stn); border-color: rgba(255, 167, 38, 0.3); }
+        input.inp-bs { color: var(--color-bs); border-color: rgba(105, 240, 174, 0.3); }
+        input.inp-is { color: var(--color-is); border-color: rgba(255, 138, 128, 0.3); }
+        input.inp-fs { color: var(--color-fs); border-color: rgba(79, 195, 247, 0.3); }
+        input.inp-design { color: var(--color-design); border-color: rgba(224, 64, 251, 0.3); }
+
+        input::placeholder {
+            color: #b0b3b8;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        input:focus {
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+            border-color: #ffffff;
+        }
+
+        button.action-btn {
+            background: #2a2a2a;
+            color: #ffffff;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 16px;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: 800;
+            margin-top: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        
+        button.action-btn:active {
+            transform: scale(0.98);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .result-card {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 10px;
+            border: 2px solid var(--accent);
+        }
+
+        .result-val {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--success);
+            margin-top: 5px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: #1e1e1e;
+            border-radius: 15px;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 18px;
+            white-space: nowrap;
+        }
+
+        th, td {
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            font-weight: 700;
+        }
+
+        th {
+            font-weight: 900;
+            font-size: 18px;
+            border-bottom: 2px solid #555;
+        }
+        
+        th.th-stn { color: var(--color-stn); }
+        th.th-bs { color: var(--color-bs); }
+        th.th-is { color: var(--color-is); }
+        th.th-fs { color: var(--color-fs); }
+        th.th-hi { color: var(--color-hi); }
+        th.th-rl { color: var(--color-bm); }
+        th.th-corr { color: #f48fb1; }
+        th.th-adj { color: var(--success); }
+
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .traverse-controls {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+        
+        .traverse-controls input {
+            border-radius: 15px;
+            padding: 14px 5px;
+            font-size: 20px;
+            text-align: center;
+        }
+        
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 900;
+            color: #ffa726;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            border-top: 2px solid rgba(255,255,255,0.2);
+            position: sticky;
+            bottom: 0;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('check')">Check Levels</button>
+        <button class="tab-btn" onclick="switchTab('traverse')">Leveling</button>
+    </div>
+
+    <datalist id="saved-bms"></datalist>
+
+    <!-- MODULE 1: CHECKING LEVELS -->
+    <div id="check" class="container active">
+        <div class="input-group">
+            <div class="input-header">
+                <label class="lbl-bm">Benchmark / Instrument RL</label>
+                <button class="clear-btn" onclick="clearSavedBMs()">Clear BMs</button>
+            </div>
+            <input type="text" inputmode="decimal" id="c_bm" class="inp-bm" list="saved-bms" placeholder="Select or type RL" oninput="saveCheckDraft()">
+        </div>
+        <div class="input-group">
+            <label class="lbl-bs" style="padding-left:15px;">Backsight Reading (BS)</label>
+            <input type="number" id="c_bs" class="inp-bs" step="0.001" placeholder="Enter BS (e.g. 1.250)" oninput="saveCheckDraft()">
+        </div>
+
+        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-top: 10px;">
+            <div class="grid-inputs">
+                <!-- Option A: Find Staff Reading -->
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <label class="lbl-design" style="font-size: 15px; text-align: center;">Target / Design RL</label>
+                    <input type="number" id="c_design" class="inp-design" step="0.001" placeholder="Enter RL" style="font-size: 18px;" oninput="saveCheckDraft()">
+                    <button class="action-btn" onclick="calcStaff()" style="border-color: var(--color-design); color: var(--color-design);">Get Staff</button>
+                </div>
+                <!-- Option B: Find Ground RL -->
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <label class="lbl-fs" style="font-size: 15px; text-align: center;">Staff Reading on Point</label>
+                    <input type="number" id="c_staff_rdg" class="inp-fs" step="0.001" placeholder="Enter Reading" style="font-size: 18px;" oninput="saveCheckDraft()">
+                    <button class="action-btn" onclick="calcElev()" style="border-color: var(--color-fs); color: var(--color-fs);">Get RL</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-card" id="c_result_card" style="display:none;">
+            <div id="c_result_label" style="color: #ffffff; font-size: 20px; font-weight: 800;">Result</div>
+            <div class="result-val" id="c_expected">-</div>
+            <div style="font-size: 18px; color: var(--color-hi); margin-top: 10px; font-weight: 900;" id="c_hi_display"></div>
+        </div>
+    </div>
+
+    <!-- MODULE 2: LEVELING TRAVERSE -->
+    <div id="traverse" class="container">
+        
+        <div class="input-group">
+            <label class="lbl-bm" style="padding-left:15px;">Starting Benchmark RL</label>
+            <input type="text" inputmode="decimal" id="t_start_rl" class="inp-bm" list="saved-bms" placeholder="Select or enter Starting BM" oninput="saveTraverseDraft()">
+        </div>
+
+        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-top: 5px;">
+            <label style="display:block; margin-bottom: 10px; color: #fff; font-size: 15px; text-align: center;">
+                For Change Points (TP), enter both FS & Next BS on the same row.
+            </label>
+            <div class="traverse-controls">
+                <input type="text" id="t_stn" class="inp-stn" placeholder="Stn" oninput="saveTraverseDraft()">
+                <input type="number" id="t_bs" class="inp-bs" step="0.001" placeholder="BS" oninput="saveTraverseDraft()">
+                <input type="number" id="t_is" class="inp-is" step="0.001" placeholder="IS" oninput="saveTraverseDraft()">
+                <input type="number" id="t_fs" class="inp-fs" step="0.001" placeholder="FS" oninput="saveTraverseDraft()">
+            </div>
+            
+            <div class="grid-inputs" style="margin-top: 15px;">
+                <button class="action-btn" onclick="addTraverseRow()" style="margin-top:0; border-color: var(--accent); color: var(--accent);">+ Add Row</button>
+                <button class="action-btn" onclick="clearTraverse()" style="margin-top:0; color:var(--error); border-color: var(--error);">Clear All</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="traverseTable">
+                <thead>
+                    <tr>
+                        <th class="th-stn">Stn</th>
+                        <th class="th-bs">BS</th>
+                        <th class="th-is">IS</th>
+                        <th class="th-fs">FS</th>
+                        <th class="th-hi">HOC</th>
+                        <th class="th-rl">RL</th>
+                        <th class="th-corr">Corr</th>
+                        <th class="th-adj">Adj RL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows added dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="input-group" style="margin-top: 10px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px;">
+            <label class="lbl-bm">Known Closing Benchmark</label>
+            <div style="display:flex; gap: 10px; flex-wrap: wrap;">
+                <input type="text" inputmode="decimal" id="t_close_bm" class="inp-bm" list="saved-bms" placeholder="Closing RL" style="flex: 1; min-width: 150px;" oninput="saveTraverseDraft()">
+                <button class="action-btn" onclick="closeTraverse()" style="margin-top:0; padding: 0 25px; border-color: var(--success); color: var(--success);">Close Traverse</button>
+            </div>
+            <div id="t_error_display" style="text-align: center; color: var(--error); font-size: 20px; font-weight: 900; margin-top: 10px;"></div>
+        </div>
+    </div>
+
+    <footer>Created by Alvin Shedrack @2026</footer>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // --- Benchmark Memory System ---
+        let savedBMs = JSON.parse(localStorage.getItem('survey_bms_v2') || '[]');
+
+        function renderBMList() {
+            const datalist = document.getElementById('saved-bms');
+            datalist.innerHTML = '';
+            savedBMs.forEach(bm => {
+                const option = document.createElement('option');
+                option.value = bm.val;
+                option.label = bm.desc; 
+                option.innerText = `${bm.val} - ${bm.desc}`;
+                datalist.appendChild(option);
+            });
+        }
+
+        function saveBM(bmRaw) {
+            if (bmRaw === null || bmRaw.trim() === '') return;
+            const parsedVal = parseFloat(bmRaw);
+            if (isNaN(parsedVal)) return;
+            
+            const valStr = parsedVal.toFixed(3);
+            
+            const exists = savedBMs.some(bm => bm.val === valStr);
+            if (!exists) {
+                let desc = prompt(`New Benchmark Detected: ${valStr}\n\nPlease enter a description for this BM:`, "BM");
+                if (desc === null || desc.trim() === '') {
+                    desc = "Unknown BM";
+                }
+                
+                savedBMs.push({ val: valStr, desc: desc.trim() });
+                savedBMs.sort((a, b) => parseFloat(b.val) - parseFloat(a.val)); 
+                localStorage.setItem('survey_bms_v2', JSON.stringify(savedBMs));
+                renderBMList();
+            }
+        }
+
+        function clearSavedBMs() {
+            if(confirm("Delete all saved Benchmarks from the dropdown list?")) {
+                savedBMs = [];
+                localStorage.removeItem('survey_bms_v2');
+                renderBMList();
+            }
+        }
+        
+        renderBMList();
+
+        // --- Auto-Save & Restore: Check Levels Draft ---
+        function saveCheckDraft() {
+            const draft = {
+                bm: document.getElementById('c_bm').value,
+                bs: document.getElementById('c_bs').value,
+                design: document.getElementById('c_design').value,
+                staff: document.getElementById('c_staff_rdg').value
+            };
+            localStorage.setItem('survey_check_draft', JSON.stringify(draft));
+        }
+
+        function loadCheckDraft() {
+            const saved = localStorage.getItem('survey_check_draft');
+            if (saved) {
+                try {
+                    const draft = JSON.parse(saved);
+                    if (draft.bm) document.getElementById('c_bm').value = draft.bm;
+                    if (draft.bs) document.getElementById('c_bs').value = draft.bs;
+                    if (draft.design) document.getElementById('c_design').value = draft.design;
+                    if (draft.staff) document.getElementById('c_staff_rdg').value = draft.staff;
+                } catch(e) {}
+            }
+        }
+
+        // --- Level Check Logic ---
+        function getCheckBasics() {
+            const bmRaw = document.getElementById('c_bm').value;
+            const bm = parseFloat(bmRaw);
+            const bs = parseFloat(document.getElementById('c_bs').value);
+
+            if (isNaN(bm) || isNaN(bs)) {
+                alert("Please enter both Benchmark RL and Backsight (BS) first.");
+                return null;
+            }
+            saveBM(bmRaw);
+            return { bm, bs, hi: bm + bs };
+        }
+
+        function calcStaff() {
+            const basics = getCheckBasics();
+            if (!basics) return;
+            
+            const design = parseFloat(document.getElementById('c_design').value);
+            if (isNaN(design)) {
+                alert("Please enter a Design Elevation.");
+                return;
+            }
+
+            const expectedReading = basics.hi - design;
+            showCheckResult("Expected Staff Reading (To Hit Design)", expectedReading.toFixed(3), basics.hi, "var(--color-design)");
+        }
+
+        function calcElev() {
+            const basics = getCheckBasics();
+            if (!basics) return;
+            
+            const staff = parseFloat(document.getElementById('c_staff_rdg').value);
+            if (isNaN(staff)) {
+                alert("Please enter a Staff Reading.");
+                return;
+            }
+
+            const groundElev = basics.hi - staff;
+            showCheckResult("Actual Ground Elevation (RL)", groundElev.toFixed(3), basics.hi, "var(--color-fs)");
+        }
+
+        function showCheckResult(label, value, hi, color) {
+            const card = document.getElementById('c_result_card');
+            card.style.display = 'block';
+            card.style.borderColor = color;
+            
+            const lblEl = document.getElementById('c_result_label');
+            lblEl.innerText = label;
+            lblEl.style.color = color;
+
+            const valEl = document.getElementById('c_expected');
+            valEl.innerText = value;
+            valEl.style.color = color;
+
+            document.getElementById('c_hi_display').innerText = `Instrument Height (HPC): ${hi.toFixed(3)}`;
+        }
+
+        // --- Traverse State & Auto-Save ---
+        let traverseData = [];
+
+        function saveTraverseDraft() {
+            const draft = {
+                start_rl: document.getElementById('t_start_rl').value,
+                close_bm: document.getElementById('t_close_bm').value,
+                stn: document.getElementById('t_stn').value,
+                bs: document.getElementById('t_bs').value,
+                is: document.getElementById('t_is').value,
+                fs: document.getElementById('t_fs').value,
+                rows: traverseData
+            };
+            localStorage.setItem('survey_traverse_draft', JSON.stringify(draft));
+        }
+
+        function loadTraverseDraft() {
+            const saved = localStorage.getItem('survey_traverse_draft');
+            if (saved) {
+                try {
+                    const draft = JSON.parse(saved);
+                    if (draft.start_rl) document.getElementById('t_start_rl').value = draft.start_rl;
+                    if (draft.close_bm) document.getElementById('t_close_bm').value = draft.close_bm;
+                    if (draft.stn) document.getElementById('t_stn').value = draft.stn;
+                    if (draft.bs) document.getElementById('t_bs').value = draft.bs;
+                    if (draft.is) document.getElementById('t_is').value = draft.is;
+                    if (draft.fs) document.getElementById('t_fs').value = draft.fs;
+                    if (draft.rows && Array.isArray(draft.rows)) {
+                        traverseData = draft.rows;
+                        renderTable();
+                    }
+                } catch(e) {}
+            }
+        }
+
+        function addTraverseRow() {
+            const startRLRaw = document.getElementById('t_start_rl').value;
+            const startRL = parseFloat(startRLRaw);
+            
+            if (isNaN(startRL) && traverseData.length === 0) {
+                alert("Please select or enter a Starting Benchmark RL first.");
+                return;
+            }
+
+            if (traverseData.length === 0) {
+                saveBM(startRLRaw);
+            }
+
+            const stn = document.getElementById('t_stn').value || `P${traverseData.length + 1}`;
+            const bs = parseFloat(document.getElementById('t_bs').value);
+            const is = parseFloat(document.getElementById('t_is').value);
+            const fs = parseFloat(document.getElementById('t_fs').value);
+
+            if (isNaN(bs) && isNaN(is) && isNaN(fs)) {
+                alert("Please enter at least one reading (BS, IS, or FS).");
+                return;
+            }
+
+            let row = { 
+                stn, 
+                bs: isNaN(bs) ? null : bs, 
+                is: isNaN(is) ? null : is, 
+                fs: isNaN(fs) ? null : fs,
+                hi: null,
+                rl: null,
+                corr: 0,
+                adj_rl: null,
+                setupNum: 0
+            };
+
+            traverseData.push(row);
+            recalculateTraverse(startRL);
+            renderTable();
+            saveTraverseDraft();
+
+            // Clear inputs for next point
+            document.getElementById('t_stn').value = '';
+            document.getElementById('t_bs').value = '';
+            document.getElementById('t_is').value = '';
+            document.getElementById('t_fs').value = '';
+            document.getElementById('t_stn').focus();
+        }
+
+        function recalculateTraverse(startRL) {
+            let currentHI = null;
+            let lastRL = startRL;
+            let setupCount = 0;
+
+            for (let i = 0; i < traverseData.length; i++) {
+                let row = traverseData[i];
+
+                if (i === 0) {
+                    row.rl = startRL;
+                    row.setupNum = 0; 
+                    if(row.bs !== null) setupCount = 1;
+                } else {
+                    if (row.is !== null && currentHI !== null) {
+                        row.rl = currentHI - row.is;
+                        row.setupNum = setupCount; 
+                    } else if (row.fs !== null && currentHI !== null) {
+                        row.rl = currentHI - row.fs;
+                        row.setupNum = setupCount; 
+                    } else {
+                        row.rl = lastRL; 
+                        row.setupNum = setupCount;
+                    }
+                }
+                
+                if (row.rl !== null) lastRL = row.rl;
+
+                if (row.bs !== null) {
+                    currentHI = row.rl + row.bs;
+                    row.hi = currentHI;
+                    
+                    if (i !== 0) {
+                        setupCount++; 
+                    }
+                } else {
+                    row.hi = null; 
+                }
+                
+                row.corr = 0;
+                row.adj_rl = row.rl;
+            }
+        }
+
+        function closeTraverse() {
+            if (traverseData.length === 0) return;
+
+            const closingBMRaw = document.getElementById('t_close_bm').value;
+            const knownClosingBM = parseFloat(closingBMRaw);
+            
+            if (isNaN(knownClosingBM)) {
+                alert("Please select or enter a valid Known Closing Benchmark.");
+                return;
+            }
+
+            saveBM(closingBMRaw);
+
+            const lastRow = traverseData[traverseData.length - 1];
+            if (lastRow.rl === null) return;
+            
+            const calculatedFinalRL = lastRow.rl;
+            const misclosure = calculatedFinalRL - knownClosingBM;
+            
+            let totalSetups = 0;
+            traverseData.forEach(r => {
+                if (r.bs !== null) totalSetups++;
+            });
+            
+            let divisor = Math.max(1, totalSetups);
+            let correctionPerSetup = -misclosure / divisor;
+
+            for (let i = 0; i < traverseData.length; i++) {
+                let row = traverseData[i];
+                row.corr = row.setupNum * correctionPerSetup;
+                
+                if (row.rl !== null) {
+                    row.adj_rl = row.rl + row.corr;
+                }
+            }
+
+            document.getElementById('t_error_display').innerText = `Misclosure: ${misclosure.toFixed(4)}m`;
+            renderTable();
+            saveTraverseDraft();
+        }
+
+        function renderTable() {
+            const tbody = document.querySelector('#traverseTable tbody');
+            tbody.innerHTML = '';
+
+            traverseData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="color: var(--color-stn);">${row.stn}</td>
+                    <td style="color: var(--color-bs);">${row.bs !== null ? row.bs.toFixed(3) : ''}</td>
+                    <td style="color: var(--color-is);">${row.is !== null ? row.is.toFixed(3) : ''}</td>
+                    <td style="color: var(--color-fs);">${row.fs !== null ? row.fs.toFixed(3) : ''}</td>
+                    <td style="color: var(--color-hi); font-size: 16px;">${row.hi !== null ? row.hi.toFixed(3) : ''}</td>
+                    <td style="color: var(--color-bm);">${row.rl !== null ? row.rl.toFixed(3) : ''}</td>
+                    <td style="color: #f48fb1; font-size: 16px;">${row.corr !== 0 ? row.corr.toFixed(4) : ''}</td>
+                    <td style="color: var(--success); font-size: 20px;">${row.adj_rl !== null ? row.adj_rl.toFixed(3) : ''}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function clearTraverse() {
+            if(confirm("Are you sure you want to clear all traverse data?")) {
+                traverseData = [];
+                localStorage.removeItem('survey_traverse_draft');
+                document.getElementById('t_start_rl').value = '';
+                document.getElementById('t_close_bm').value = '';
+                document.getElementById('t_stn').value = '';
+                document.getElementById('t_bs').value = '';
+                document.getElementById('t_is').value = '';
+                document.getElementById('t_fs').value = '';
+                document.getElementById('t_error_display').innerText = '';
+                renderTable();
+            }
+        }
+
+        // Load existing drafts on startup
+        loadCheckDraft();
+        loadTraverseDraft();
+    </script>
+</body>
+</html>
