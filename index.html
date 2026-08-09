@@ -24,7 +24,7 @@
             --color-bs: #69f0ae; /* Bright Green */
             --color-is: #ff8a80; /* Bright Red */
             --color-fs: #4fc3f7; /* Bright Blue */
-            --color-design: #e040fb; /* Bright Purple */
+            --color-design: #ffb74d; /* Bright Amber / Warm Gold */
             --color-hi: #ffffff; /* Pure White */
             
             --font-family: system-ui, -apple-system, sans-serif;
@@ -461,7 +461,7 @@
             }
 
             const expectedReading = basics.hi - design;
-            showCheckResult("Expected Staff Reading (To Hit Design)", expectedReading.toFixed(3), basics.hi, "var(--color-design)");
+            showCheckResult("Expected Staff Reading", expectedReading.toFixed(3), basics.hi, "var(--color-design)");
         }
 
         function calcElev() {
@@ -491,7 +491,7 @@
             valEl.innerText = value;
             valEl.style.color = color;
 
-            document.getElementById('c_hi_display').innerText = `Instrument Height (HPC): ${hi.toFixed(3)}`;
+            document.getElementById('c_hi_display').innerText = `Instrument Height (HOC): ${hi.toFixed(3)}`;
         }
 
         // --- Traverse State & Auto-Save ---
