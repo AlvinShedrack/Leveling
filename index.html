@@ -5,25 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Leveling Pro</title>
     <meta name="theme-color" content="#000000">
-    <link rel="manifest" href='data:application/manifest+json;utf8,{"name":"Leveling Pro","short_name":"Leveling","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#00[...'>
+    <link rel="manifest" href='data:application/manifest+json;utf8,{"name":"Leveling Pro","short_name":"Leveling","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#000000"}'>
     <style>
         :root {
             --bg-top: #000000;
             --bg-bottom: #151b3b;
             --surface: #282a2f;
+            --surface-card: #1e1e1e;
             --text-main: #ffffff;
             --text-muted: #e0e2e8; 
             --accent: #8ab4f8;
             --error: #ff8a80;
             --success: #69f0ae;
             
-            --color-bm: #ffee58;
-            --color-stn: #ffa726;
-            --color-bs: #69f0ae;
-            --color-is: #ff8a80;
-            --color-fs: #4fc3f7;
-            --color-design: #ffb74d;
-            --color-hi: #ffffff;
+            /* High Contrast Colors for Outdoor Visibility */
+            --color-bm: #ffee58; /* Bright Yellow */
+            --color-stn: #ffa726; /* Bright Orange */
+            --color-bs: #69f0ae; /* Bright Green */
+            --color-is: #ff8a80; /* Bright Red */
+            --color-fs: #4fc3f7; /* Bright Blue */
+            --color-design: #ffb74d; /* Bright Amber / Warm Gold */
+            --color-hi: #ffffff; /* Pure White */
+            --color-board: #e040fb; /* Magenta/Purple for Board Height */
             
             --font-family: system-ui, -apple-system, sans-serif;
         }
@@ -48,7 +51,7 @@
             display: flex;
             justify-content: center;
             gap: 10px;
-            padding: 20px 20px 20px;
+            padding: 20px 20px 10px;
         }
 
         .tab-btn {
@@ -60,6 +63,7 @@
             font-weight: bold;
             border-radius: 20px;
             transition: 0.3s;
+            cursor: pointer;
         }
 
         .tab-btn.active {
@@ -70,7 +74,7 @@
 
         .container {
             flex: 1;
-            padding: 0 20px 30px;
+            padding: 10px 20px 30px;
             display: none;
             flex-direction: column;
             gap: 18px;
@@ -91,30 +95,39 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 15px;
+            padding: 0 5px;
         }
 
         label {
             font-size: 18px;
             font-weight: 800;
         }
-
+        
         .lbl-bm { color: var(--color-bm); }
         .lbl-stn { color: var(--color-stn); }
         .lbl-bs { color: var(--color-bs); }
         .lbl-is { color: var(--color-is); }
         .lbl-fs { color: var(--color-fs); }
         .lbl-design { color: var(--color-design); }
+        .lbl-board { color: var(--color-board); }
 
-        .clear-btn {
-            background: rgba(255, 138, 128, 0.2);
-            border: 1px solid var(--error);
-            color: var(--error);
-            font-size: 14px;
+        .btn-link {
+            background: rgba(255, 238, 88, 0.15);
+            border: 1px solid var(--color-bm);
+            color: var(--color-bm);
+            font-size: 13px;
             font-weight: bold;
             border-radius: 12px;
             cursor: pointer;
-            padding: 5px 12px;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: background 0.2s;
+        }
+
+        .btn-link:hover {
+            background: rgba(255, 238, 88, 0.3);
         }
 
         input {
@@ -127,14 +140,14 @@
             outline: none;
             width: 100%;
         }
-
-        input.inp-bm { color: var(--color-bm); border-color: rgba(255, 238, 88, 0.3); }
+        
+        input.inp-bm { color: var(--color-bm); border-color: rgba(255, 238, 88, 0.4); }
         input.inp-stn { color: var(--color-stn); border-color: rgba(255, 167, 38, 0.3); }
         input.inp-bs { color: var(--color-bs); border-color: rgba(105, 240, 174, 0.3); }
         input.inp-is { color: var(--color-is); border-color: rgba(255, 138, 128, 0.3); }
         input.inp-fs { color: var(--color-fs); border-color: rgba(79, 195, 247, 0.3); }
-        input.inp-design { color: var(--color-design); border-color: rgba(224, 64, 251, 0.3); }
-        input.inp-board-height { color: #ffd54f; border-color: rgba(255, 213, 79, 0.35); }
+        input.inp-design { color: var(--color-design); border-color: rgba(255, 183, 77, 0.3); }
+        input.inp-board { color: var(--color-board); border-color: rgba(224, 64, 251, 0.3); }
 
         input::placeholder {
             color: #b0b3b8;
@@ -147,6 +160,149 @@
             border-color: #ffffff;
         }
 
+        /* Benchmark Select Combo Control */
+        .bm-combo-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .bm-combo-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .bm-combo-input {
+            padding-right: 48px;
+        }
+
+        .bm-combo-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--color-bm);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bm-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: #23252b;
+            border: 2px solid var(--color-bm);
+            border-radius: 16px;
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+        }
+
+        .bm-dropdown-menu.show {
+            display: block;
+        }
+
+        .bm-item {
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .bm-item:last-child {
+            border-bottom: none;
+        }
+
+        .bm-item:hover, .bm-item:active {
+            background: rgba(255, 238, 88, 0.2);
+        }
+
+        .bm-val-text {
+            color: var(--color-bm);
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .bm-desc-text {
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .bm-item-delete {
+            background: rgba(255, 138, 128, 0.2);
+            color: var(--error);
+            border: 1px solid var(--error);
+            border-radius: 8px;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .bm-item-delete:hover {
+            background: var(--error);
+            color: #000;
+        }
+
+        .bm-empty-notice {
+            padding: 14px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Toggle / Switcher Styles */
+        .mode-switch {
+            display: flex;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 4px;
+            margin-bottom: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 12px 10px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 15px;
+            font-weight: 800;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn.active {
+            background: #33333e;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+
+        .mode-btn.active.btn-staff {
+            color: var(--color-design);
+            border: 1px solid var(--color-design);
+        }
+
+        .mode-btn.active.btn-rl {
+            color: var(--color-fs);
+            border: 1px solid var(--color-fs);
+        }
+
         button.action-btn {
             background: #2a2a2a;
             color: #ffffff;
@@ -157,8 +313,10 @@
             font-weight: 800;
             margin-top: 5px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            cursor: pointer;
+            width: 100%;
         }
-
+        
         button.action-btn:active {
             transform: scale(0.98);
             background: rgba(255,255,255,0.2);
@@ -208,7 +366,7 @@
             font-size: 18px;
             border-bottom: 2px solid #555;
         }
-
+        
         th.th-stn { color: var(--color-stn); }
         th.th-bs { color: var(--color-bs); }
         th.th-is { color: var(--color-is); }
@@ -224,47 +382,138 @@
             gap: 12px;
         }
 
-        .design-panel {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 12px;
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.12);
-        }
-
-        .field-box {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-width: 0;
-        }
-
-        .field-box label {
-            padding-left: 5px;
-        }
-
-        .helper-note {
-            color: rgba(255,255,255,0.75);
-            font-size: 13px;
-            font-weight: 700;
-            text-align: center;
-            margin-top: 6px;
-            letter-spacing: 0.3px;
-        }
-
         .traverse-controls {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 6px;
         }
-
+        
         .traverse-controls input {
             border-radius: 15px;
             padding: 14px 5px;
             font-size: 20px;
             text-align: center;
+        }
+        
+        /* Modal Popup Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: #212328;
+            border: 2px solid var(--color-bm);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 450px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+        }
+
+        .modal-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            color: var(--color-bm);
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .modal-close {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .modal-body {
+            padding: 15px 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .bm-manager-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bm-mgr-item {
+            background: #18191c;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bm-mgr-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bm-mgr-val {
+            color: var(--color-bm);
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .bm-mgr-desc {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .bm-mgr-del-btn {
+            background: rgba(255, 138, 128, 0.15);
+            color: var(--error);
+            border: 1px solid var(--error);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .bm-mgr-del-btn:hover {
+            background: var(--error);
+            color: #000;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            gap: 10px;
         }
 
         footer {
@@ -281,14 +530,8 @@
             bottom: 0;
             z-index: 100;
         }
-
-        @media (max-width: 600px) {
-            .design-panel,
-            .grid-inputs {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
+    <!-- Excel export library -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
@@ -298,34 +541,68 @@
         <button class="tab-btn" onclick="switchTab('traverse')">Leveling</button>
     </div>
 
-    <datalist id="saved-bms"></datalist>
-
+    <!-- MODULE 1: CHECKING LEVELS -->
     <div id="check" class="container active">
-        <div class="input-group">
-            <div class="input-header">
-                <label class="lbl-bm">Benchmark / Instrument RL</label>
-                <button class="clear-btn" onclick="clearSavedBMs()">Clear BMs</button>
+        <!-- 2-Column Grid for Benchmark RL & Backsight Reading -->
+        <div class="grid-inputs">
+            <div class="input-group">
+                <div class="input-header">
+                    <label class="lbl-bm">Benchmark RL</label>
+                    <button class="btn-link" onclick="openBMManager()" style="padding: 3px 8px; font-size: 11px;">
+                        ⚙️ BMs
+                    </button>
+                </div>
+                
+                <!-- BM Combo Selector Component -->
+                <div class="bm-combo-container" id="combo_c_bm">
+                    <div class="bm-combo-wrapper">
+                        <input type="text" inputmode="decimal" id="c_bm" class="inp-bm bm-combo-input" placeholder="Select/type RL" oninput="handleBMInput('c_bm', 'saveCheckDraft')" onfocus="showBMDropdown('combo_c_bm')" autocomplete="off">
+                        <button type="button" class="bm-combo-toggle" onclick="toggleBMDropdown('combo_c_bm')">▼</button>
+                    </div>
+                    <div class="bm-dropdown-menu" id="dropdown_combo_c_bm">
+                        <!-- Dropdown options populated dynamically -->
+                    </div>
+                </div>
             </div>
-            <input type="text" inputmode="decimal" id="c_bm" class="inp-bm" list="saved-bms" placeholder="Select or type RL" oninput="saveCheckDraft()">
-        </div>
-        <div class="input-group">
-            <label class="lbl-bs" style="padding-left:15px;">Backsight Reading (BS)</label>
-            <input type="number" id="c_bs" class="inp-bs" step="0.001" placeholder="Enter BS (e.g. 1.250)" oninput="saveCheckDraft()">
+
+            <div class="input-group">
+                <div class="input-header">
+                    <label class="lbl-bs">Backsight (BS)</label>
+                </div>
+                <input type="number" id="c_bs" class="inp-bs" step="0.001" placeholder="e.g. 1.250" oninput="saveCheckDraft()">
+            </div>
         </div>
 
-        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-top: 10px;">
-            <div class="design-panel">
-                <div class="field-box">
-                    <label class="lbl-design">Target / Design RL</label>
-                    <input type="number" id="c_design" class="inp-design" step="0.001" placeholder="Enter RL" style="font-size: 18px;" oninput="saveCheckDraft()">
-                </div>
-                <div class="field-box">
-                    <label class="lbl-design">Height of Board</label>
-                    <input type="number" id="c_board_height" class="inp-board-height" step="0.001" placeholder="Optional board height" style="font-size: 18px;" oninput="saveCheckDraft()">
-                </div>
+        <!-- Mode Switch Section -->
+        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-top: 5px;">
+            <div class="mode-switch">
+                <button id="mode_staff_btn" class="mode-btn btn-staff active" onclick="setCalcMode('staff')">Find Staff Reading</button>
+                <button id="mode_rl_btn" class="mode-btn btn-rl" onclick="setCalcMode('rl')">Find Ground RL</button>
             </div>
-            <div class="helper-note">Staff reading = (HI - Design RL) - Board Height</div>
-            <button class="action-btn" onclick="calcStaff()" style="border-color: var(--color-design); color: var(--color-design); width: 100%;">Get Staff</button>
+
+            <!-- Mode A: Find Staff Reading (2-Column Grid for Board Height & Design RL) -->
+            <div id="calc_staff_section" style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+                <div class="grid-inputs">
+                    <div class="input-group">
+                        <label class="lbl-board" style="font-size: 15px;">Board Height (m)</label>
+                        <input type="number" id="c_board_h" class="inp-board" step="0.001" placeholder="0.000" oninput="saveCheckDraft()">
+                    </div>
+                    <div class="input-group">
+                        <label class="lbl-design" style="font-size: 15px;">Target / Design RL</label>
+                        <input type="number" id="c_design" class="inp-design" step="0.001" placeholder="Target RL" oninput="saveCheckDraft()">
+                    </div>
+                </div>
+                <button class="action-btn" onclick="calcStaff()" style="border-color: var(--color-design); color: var(--color-design);">Get Staff Reading</button>
+            </div>
+
+            <!-- Mode B: Find Ground RL -->
+            <div id="calc_rl_section" style="display: none; flex-direction: column; gap: 12px; margin-top: 10px;">
+                <div class="input-group">
+                    <label class="lbl-fs" style="padding-left:5px; font-size: 16px;">Staff Reading</label>
+                    <input type="number" id="c_staff_rdg" class="inp-fs" step="0.001" placeholder="Enter Staff Reading" oninput="saveCheckDraft()">
+                </div>
+                <button class="action-btn" onclick="calcElev()" style="border-color: var(--color-fs); color: var(--color-fs);">Get Ground RL</button>
+            </div>
         </div>
 
         <div class="result-card" id="c_result_card" style="display:none;">
@@ -335,15 +612,31 @@
         </div>
     </div>
 
+    <!-- MODULE 2: LEVELING TRAVERSE -->
     <div id="traverse" class="container">
+        
         <div class="input-group">
-            <label class="lbl-bm" style="padding-left:15px;">Starting Benchmark RL</label>
-            <input type="text" inputmode="decimal" id="t_start_rl" class="inp-bm" list="saved-bms" placeholder="Select or enter Starting BM" oninput="saveTraverseDraft()">
+            <div class="input-header">
+                <label class="lbl-bm">Starting Benchmark RL</label>
+                <button class="btn-link" onclick="openBMManager()">
+                    ⚙️ Manage BMs
+                </button>
+            </div>
+            
+            <div class="bm-combo-container" id="combo_t_start_rl">
+                <div class="bm-combo-wrapper">
+                    <input type="text" inputmode="decimal" id="t_start_rl" class="inp-bm bm-combo-input" placeholder="Select or type Starting BM" oninput="handleBMInput('t_start_rl', 'saveTraverseDraft')" onfocus="showBMDropdown('combo_t_start_rl')" autocomplete="off">
+                    <button type="button" class="bm-combo-toggle" onclick="toggleBMDropdown('combo_t_start_rl')">▼</button>
+                </div>
+                <div class="bm-dropdown-menu" id="dropdown_combo_t_start_rl">
+                    <!-- Dropdown options -->
+                </div>
+            </div>
         </div>
 
         <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-top: 5px;">
             <label style="display:block; margin-bottom: 10px; color: #fff; font-size: 15px; text-align: center;">
-                For Change Points (TP), enter both FS & Next BS on the same row.
+                For Change Points (TP), enter both FS &amp; Next BS on the same row.
             </label>
             <div class="traverse-controls">
                 <input type="text" id="t_stn" class="inp-stn" placeholder="Stn" oninput="saveTraverseDraft()">
@@ -351,7 +644,7 @@
                 <input type="number" id="t_is" class="inp-is" step="0.001" placeholder="IS" oninput="saveTraverseDraft()">
                 <input type="number" id="t_fs" class="inp-fs" step="0.001" placeholder="FS" oninput="saveTraverseDraft()">
             </div>
-
+            
             <div class="grid-inputs" style="margin-top: 15px;">
                 <button class="action-btn" onclick="addTraverseRow()" style="margin-top:0; border-color: var(--accent); color: var(--accent);">+ Add Row</button>
                 <button class="action-btn" onclick="clearTraverse()" style="margin-top:0; color:var(--error); border-color: var(--error);">Clear All</button>
@@ -372,18 +665,50 @@
                         <th class="th-adj">Adj RL</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                    <!-- Rows added dynamically -->
+                </tbody>
             </table>
         </div>
 
         <div class="input-group" style="margin-top: 10px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px;">
             <label class="lbl-bm">Known Closing Benchmark</label>
-            <div style="display:flex; gap: 10px; flex-wrap: wrap;">
-                <input type="text" inputmode="decimal" id="t_close_bm" class="inp-bm" list="saved-bms" placeholder="Closing RL" style="flex: 1; min-width: 150px;" oninput="saveTraverseDraft()">
-                <button class="action-btn" onclick="closeTraverse()" style="margin-top:0; padding: 0 25px; border-color: var(--success); color: var(--success);">Close Traverse</button>
+            <div style="display:flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
+                <div class="bm-combo-container" id="combo_t_close_bm" style="flex: 1; min-width: 150px;">
+                    <div class="bm-combo-wrapper">
+                        <input type="text" inputmode="decimal" id="t_close_bm" class="inp-bm bm-combo-input" placeholder="Closing RL" oninput="handleBMInput('t_close_bm', 'saveTraverseDraft')" onfocus="showBMDropdown('combo_t_close_bm')" autocomplete="off">
+                        <button type="button" class="bm-combo-toggle" onclick="toggleBMDropdown('combo_t_close_bm')">▼</button>
+                    </div>
+                    <div class="bm-dropdown-menu" id="dropdown_combo_t_close_bm">
+                        <!-- Dropdown options -->
+                    </div>
+                </div>
+                <button class="action-btn" onclick="closeTraverse()" style="margin-top:0; width: auto; padding: 16px 25px; border-color: var(--success); color: var(--success);">Close Traverse</button>
             </div>
             <div id="t_error_display" style="text-align: center; color: var(--error); font-size: 20px; font-weight: 900; margin-top: 10px;"></div>
-            <button id="download_excel_btn" class="action-btn" onclick="downloadTraverseExcel()" style="display:none; margin-top:12px; width:100%; border-color:#4caf50; color:#4caf50;">Download Excel</button>
+            <button id="download_excel_btn" class="action-btn" onclick="downloadTraverseExcel()"
+                    style="display:none; margin-top:12px; width:100%; border-color:#4caf50; color:#4caf50;">
+                Download Excel
+            </button>
+        </div>
+    </div>
+
+    <!-- BENCHMARK MANAGER MODAL DIALOG -->
+    <div class="modal-overlay" id="bm_modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title">Saved Benchmarks</div>
+                <button class="modal-close" onclick="closeBMManager()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div id="bm_manager_list" class="bm-manager-list">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-mgr-del-btn" onclick="clearAllBMs()" style="flex: 1; text-align: center;">Delete All BMs</button>
+                <button class="tab-btn active" onclick="closeBMManager()" style="flex: 1; font-size: 15px; padding: 10px;">Done</button>
+            </div>
         </div>
     </div>
 
@@ -395,56 +720,213 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             event.target.classList.add('active');
+            closeAllBMDropdowns();
         }
 
+        // --- Mode Switcher for Check Levels ---
+        let currentCalcMode = 'staff';
+
+        function setCalcMode(mode) {
+            currentCalcMode = mode;
+            const staffBtn = document.getElementById('mode_staff_btn');
+            const rlBtn = document.getElementById('mode_rl_btn');
+            const staffSection = document.getElementById('calc_staff_section');
+            const rlSection = document.getElementById('calc_rl_section');
+
+            if (mode === 'staff') {
+                staffBtn.classList.add('active');
+                rlBtn.classList.remove('active');
+                staffSection.style.display = 'flex';
+                rlSection.style.display = 'none';
+            } else {
+                rlBtn.classList.add('active');
+                staffBtn.classList.remove('active');
+                staffSection.style.display = 'none';
+                rlSection.style.display = 'flex';
+            }
+            saveCheckDraft();
+        }
+
+        // --- Enhanced Benchmark Data & Storage ---
         let savedBMs = JSON.parse(localStorage.getItem('survey_bms_v2') || '[]');
 
-        function renderBMList() {
-            const datalist = document.getElementById('saved-bms');
-            datalist.innerHTML = '';
-            savedBMs.forEach(bm => {
-                const option = document.createElement('option');
-                option.value = bm.val;
-                option.label = bm.desc;
-                option.innerText = `${bm.val} - ${bm.desc}`;
-                datalist.appendChild(option);
-            });
+        function saveBMListToStorage() {
+            localStorage.setItem('survey_bms_v2', JSON.stringify(savedBMs));
+            renderAllBMDropdowns();
+            renderBMManagerList();
         }
 
         function saveBM(bmRaw) {
-            if (bmRaw === null || bmRaw.trim() === '') return;
+            if (bmRaw === null || String(bmRaw).trim() === '') return;
             const parsedVal = parseFloat(bmRaw);
             if (isNaN(parsedVal)) return;
-
+            
             const valStr = parsedVal.toFixed(3);
+            
             const exists = savedBMs.some(bm => bm.val === valStr);
             if (!exists) {
-                let desc = prompt(`New Benchmark Detected: ${valStr}\n\nPlease enter a description for this BM:`, 'BM');
-                if (desc === null || desc.trim() === '') desc = 'Unknown BM';
-
+                let desc = prompt(`New Benchmark Detected: ${valStr}\n\nPlease enter a label / description for this BM:`, "BM");
+                if (desc === null || desc.trim() === '') {
+                    desc = "Custom BM";
+                }
+                
                 savedBMs.push({ val: valStr, desc: desc.trim() });
-                savedBMs.sort((a, b) => parseFloat(b.val) - parseFloat(a.val));
-                localStorage.setItem('survey_bms_v2', JSON.stringify(savedBMs));
-                renderBMList();
+                savedBMs.sort((a, b) => parseFloat(b.val) - parseFloat(a.val)); 
+                saveBMListToStorage();
             }
         }
 
-        function clearSavedBMs() {
-            if (confirm('Delete all saved Benchmarks from the dropdown list?')) {
+        function deleteSingleBM(valStr, event) {
+            if (event) event.stopPropagation();
+            if (confirm(`Delete Benchmark ${valStr} from saved list?`)) {
+                savedBMs = savedBMs.filter(bm => bm.val !== valStr);
+                saveBMListToStorage();
+            }
+        }
+
+        function clearAllBMs() {
+            if(confirm("Are you sure you want to delete ALL saved Benchmarks?")) {
                 savedBMs = [];
-                localStorage.removeItem('survey_bms_v2');
-                renderBMList();
+                saveBMListToStorage();
             }
         }
 
-        renderBMList();
+        // --- Custom Combo Dropdown UI Handlers ---
+        const comboIds = ['combo_c_bm', 'combo_t_start_rl', 'combo_t_close_bm'];
 
+        function showBMDropdown(containerId) {
+            closeAllBMDropdowns(containerId);
+            const container = document.getElementById(containerId);
+            const menu = document.getElementById('dropdown_' + containerId);
+            const input = container.querySelector('input');
+            filterAndRenderDropdown(containerId, input.value);
+            menu.classList.add('show');
+        }
+
+        function toggleBMDropdown(containerId) {
+            const menu = document.getElementById('dropdown_' + containerId);
+            if (menu.classList.contains('show')) {
+                menu.classList.remove('show');
+            } else {
+                showBMDropdown(containerId);
+            }
+        }
+
+        function closeAllBMDropdowns(exceptId) {
+            comboIds.forEach(id => {
+                if (id !== exceptId) {
+                    const menu = document.getElementById('dropdown_' + id);
+                    if (menu) menu.classList.remove('show');
+                }
+            });
+        }
+
+        function handleBMInput(inputId, saveDraftCallbackName) {
+            const containerId = 'combo_' + inputId;
+            const input = document.getElementById(inputId);
+            filterAndRenderDropdown(containerId, input.value);
+            showBMDropdown(containerId);
+            
+            if (saveDraftCallbackName && typeof window[saveDraftCallbackName] === 'function') {
+                window[saveDraftCallbackName]();
+            }
+        }
+
+        function selectBMValue(containerId, valStr) {
+            const container = document.getElementById(containerId);
+            const input = container.querySelector('input');
+            input.value = valStr;
+            closeAllBMDropdowns();
+            
+            if (containerId === 'combo_c_bm') saveCheckDraft();
+            if (containerId === 'combo_t_start_rl' || containerId === 'combo_t_close_bm') saveTraverseDraft();
+        }
+
+        function filterAndRenderDropdown(containerId, searchText) {
+            const menu = document.getElementById('dropdown_' + containerId);
+            if (!menu) return;
+
+            const query = (searchText || '').trim().toLowerCase();
+            const filtered = savedBMs.filter(bm => 
+                bm.val.toLowerCase().includes(query) || 
+                bm.desc.toLowerCase().includes(query)
+            );
+
+            if (filtered.length === 0) {
+                menu.innerHTML = `<div class="bm-empty-notice">${savedBMs.length === 0 ? 'No saved benchmarks.' : 'No matching benchmark.'}</div>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(bm => {
+                html += `
+                    <div class="bm-item" onclick="selectBMValue('${containerId}', '${bm.val}')">
+                        <div>
+                            <span class="bm-val-text">${bm.val}</span>
+                            <span class="bm-desc-text"> (${bm.desc})</span>
+                        </div>
+                        <button class="bm-item-delete" title="Delete" onclick="deleteSingleBM('${bm.val}', event)">✕</button>
+                    </div>
+                `;
+            });
+            menu.innerHTML = html;
+        }
+
+        function renderAllBMDropdowns() {
+            comboIds.forEach(id => {
+                const input = document.getElementById(id.replace('combo_', ''));
+                const val = input ? input.value : '';
+                filterAndRenderDropdown(id, val);
+            });
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.bm-combo-container')) {
+                closeAllBMDropdowns();
+            }
+        });
+
+        // --- Benchmark Manager Modal UI ---
+        function openBMManager() {
+            renderBMManagerList();
+            document.getElementById('bm_modal').classList.add('active');
+        }
+
+        function closeBMManager() {
+            document.getElementById('bm_modal').classList.remove('active');
+        }
+
+        function renderBMManagerList() {
+            const listEl = document.getElementById('bm_manager_list');
+            if (savedBMs.length === 0) {
+                listEl.innerHTML = `<div class="bm-empty-notice" style="padding: 30px;">No saved benchmarks found.<br>Type a new RL in any benchmark field to automatically save it!</div>`;
+                return;
+            }
+
+            let html = '';
+            savedBMs.forEach(bm => {
+                html += `
+                    <div class="bm-mgr-item">
+                        <div class="bm-mgr-info">
+                            <span class="bm-mgr-val">${bm.val}</span>
+                            <span class="bm-mgr-desc">${bm.desc}</span>
+                        </div>
+                        <button class="bm-mgr-del-btn" onclick="deleteSingleBM('${bm.val}', event)">Delete</button>
+                    </div>
+                `;
+            });
+            listEl.innerHTML = html;
+        }
+
+        // --- Auto-Save & Restore: Check Levels Draft ---
         function saveCheckDraft() {
             const draft = {
+                mode: currentCalcMode,
                 bm: document.getElementById('c_bm').value,
                 bs: document.getElementById('c_bs').value,
+                board: document.getElementById('c_board_h').value,
                 design: document.getElementById('c_design').value,
-                boardHeight: document.getElementById('c_board_height').value,
                 staff: document.getElementById('c_staff_rdg').value
             };
             localStorage.setItem('survey_check_draft', JSON.stringify(draft));
@@ -455,22 +937,24 @@
             if (saved) {
                 try {
                     const draft = JSON.parse(saved);
+                    if (draft.mode) setCalcMode(draft.mode);
                     if (draft.bm) document.getElementById('c_bm').value = draft.bm;
                     if (draft.bs) document.getElementById('c_bs').value = draft.bs;
+                    if (draft.board) document.getElementById('c_board_h').value = draft.board;
                     if (draft.design) document.getElementById('c_design').value = draft.design;
-                    if (draft.boardHeight) document.getElementById('c_board_height').value = draft.boardHeight;
                     if (draft.staff) document.getElementById('c_staff_rdg').value = draft.staff;
-                } catch (e) {}
+                } catch(e) {}
             }
         }
 
+        // --- Level Check Calculations ---
         function getCheckBasics() {
             const bmRaw = document.getElementById('c_bm').value;
             const bm = parseFloat(bmRaw);
             const bs = parseFloat(document.getElementById('c_bs').value);
 
             if (isNaN(bm) || isNaN(bs)) {
-                alert('Please enter both Benchmark RL and Backsight (BS) first.');
+                alert("Please enter both Benchmark RL and Backsight (BS) first.");
                 return null;
             }
             saveBM(bmRaw);
@@ -480,38 +964,39 @@
         function calcStaff() {
             const basics = getCheckBasics();
             if (!basics) return;
-
+            
             const design = parseFloat(document.getElementById('c_design').value);
             if (isNaN(design)) {
-                alert('Please enter a Design Elevation.');
+                alert("Please enter a Target / Design RL.");
                 return;
             }
 
-            const boardHeight = parseFloat(document.getElementById('c_board_height').value);
-            const adjustment = isNaN(boardHeight) ? 0 : boardHeight;
-            const expectedReading = basics.hi - design - adjustment;
-            showCheckResult('Expected Staff Reading', expectedReading.toFixed(3), basics.hi, 'var(--color-design)');
+            const boardInput = document.getElementById('c_board_h').value;
+            const boardHeight = boardInput !== "" && !isNaN(parseFloat(boardInput)) ? parseFloat(boardInput) : 0;
+
+            const expectedReading = (basics.hi - design) - boardHeight;
+            showCheckResult("Expected Staff Reading", expectedReading.toFixed(3), basics.hi, "var(--color-design)");
         }
 
         function calcElev() {
             const basics = getCheckBasics();
             if (!basics) return;
-
+            
             const staff = parseFloat(document.getElementById('c_staff_rdg').value);
             if (isNaN(staff)) {
-                alert('Please enter a Staff Reading.');
+                alert("Please enter a Staff Reading.");
                 return;
             }
 
             const groundElev = basics.hi - staff;
-            showCheckResult('Actual Ground Elevation (RL)', groundElev.toFixed(3), basics.hi, 'var(--color-fs)');
+            showCheckResult("Actual Ground Elevation (RL)", groundElev.toFixed(3), basics.hi, "var(--color-fs)");
         }
 
         function showCheckResult(label, value, hi, color) {
             const card = document.getElementById('c_result_card');
             card.style.display = 'block';
             card.style.borderColor = color;
-
+            
             const lblEl = document.getElementById('c_result_label');
             lblEl.innerText = label;
             lblEl.style.color = color;
@@ -523,6 +1008,7 @@
             document.getElementById('c_hi_display').innerText = `Instrument Height (HOC): ${hi.toFixed(3)}`;
         }
 
+        // --- Traverse State & Auto-Save ---
         let traverseData = [];
 
         function saveTraverseDraft() {
@@ -553,20 +1039,22 @@
                         traverseData = draft.rows;
                         renderTable();
                     }
-                } catch (e) {}
+                } catch(e) {}
             }
         }
 
         function addTraverseRow() {
             const startRLRaw = document.getElementById('t_start_rl').value;
             const startRL = parseFloat(startRLRaw);
-
+            
             if (isNaN(startRL) && traverseData.length === 0) {
-                alert('Please select or enter a Starting Benchmark RL first.');
+                alert("Please select or enter a Starting Benchmark RL first.");
                 return;
             }
 
-            if (traverseData.length === 0) saveBM(startRLRaw);
+            if (traverseData.length === 0) {
+                saveBM(startRLRaw);
+            }
 
             const stn = document.getElementById('t_stn').value || `P${traverseData.length + 1}`;
             const bs = parseFloat(document.getElementById('t_bs').value);
@@ -574,14 +1062,14 @@
             const fs = parseFloat(document.getElementById('t_fs').value);
 
             if (isNaN(bs) && isNaN(is) && isNaN(fs)) {
-                alert('Please enter at least one reading (BS, IS, or FS).');
+                alert("Please enter at least one reading (BS, IS, or FS).");
                 return;
             }
 
-            const row = {
-                stn,
-                bs: isNaN(bs) ? null : bs,
-                is: isNaN(is) ? null : is,
+            let row = { 
+                stn, 
+                bs: isNaN(bs) ? null : bs, 
+                is: isNaN(is) ? null : is, 
                 fs: isNaN(fs) ? null : fs,
                 hi: null,
                 rl: null,
@@ -595,6 +1083,7 @@
             renderTable();
             saveTraverseDraft();
 
+            // Clear inputs for next point
             document.getElementById('t_stn').value = '';
             document.getElementById('t_bs').value = '';
             document.getElementById('t_is').value = '';
@@ -608,35 +1097,38 @@
             let setupCount = 0;
 
             for (let i = 0; i < traverseData.length; i++) {
-                const row = traverseData[i];
+                let row = traverseData[i];
 
                 if (i === 0) {
                     row.rl = startRL;
-                    row.setupNum = 0;
-                    if (row.bs !== null) setupCount = 1;
+                    row.setupNum = 0; 
+                    if(row.bs !== null) setupCount = 1;
                 } else {
                     if (row.is !== null && currentHI !== null) {
                         row.rl = currentHI - row.is;
-                        row.setupNum = setupCount;
+                        row.setupNum = setupCount; 
                     } else if (row.fs !== null && currentHI !== null) {
                         row.rl = currentHI - row.fs;
-                        row.setupNum = setupCount;
+                        row.setupNum = setupCount; 
                     } else {
-                        row.rl = lastRL;
+                        row.rl = lastRL; 
                         row.setupNum = setupCount;
                     }
                 }
-
+                
                 if (row.rl !== null) lastRL = row.rl;
 
                 if (row.bs !== null) {
                     currentHI = row.rl + row.bs;
                     row.hi = currentHI;
-                    if (i !== 0) setupCount++;
+                    
+                    if (i !== 0) {
+                        setupCount++; 
+                    }
                 } else {
-                    row.hi = null;
+                    row.hi = null; 
                 }
-
+                
                 row.corr = 0;
                 row.adj_rl = row.rl;
             }
@@ -647,9 +1139,9 @@
 
             const closingBMRaw = document.getElementById('t_close_bm').value;
             const knownClosingBM = parseFloat(closingBMRaw);
-
+            
             if (isNaN(knownClosingBM)) {
-                alert('Please select or enter a valid Known Closing Benchmark.');
+                alert("Please select or enter a valid Known Closing Benchmark.");
                 return;
             }
 
@@ -657,22 +1149,25 @@
 
             const lastRow = traverseData[traverseData.length - 1];
             if (lastRow.rl === null) return;
-
+            
             const calculatedFinalRL = lastRow.rl;
             const misclosure = calculatedFinalRL - knownClosingBM;
-
+            
             let totalSetups = 0;
             traverseData.forEach(r => {
                 if (r.bs !== null) totalSetups++;
             });
-
-            const divisor = Math.max(1, totalSetups);
-            const correctionPerSetup = -misclosure / divisor;
+            
+            let divisor = Math.max(1, totalSetups);
+            let correctionPerSetup = -misclosure / divisor;
 
             for (let i = 0; i < traverseData.length; i++) {
-                const row = traverseData[i];
+                let row = traverseData[i];
                 row.corr = row.setupNum * correctionPerSetup;
-                if (row.rl !== null) row.adj_rl = row.rl + row.corr;
+                
+                if (row.rl !== null) {
+                    row.adj_rl = row.rl + row.corr;
+                }
             }
 
             document.getElementById('t_error_display').innerText = `Misclosure: ${misclosure.toFixed(4)}m`;
@@ -683,7 +1178,7 @@
 
         function downloadTraverseExcel() {
             if (traverseData.length === 0) {
-                alert('There is no traverse data to export.');
+                alert("There is no traverse data to export.");
                 return;
             }
 
@@ -696,7 +1191,10 @@
             const knownClosingBM = parseFloat(document.getElementById('t_close_bm').value);
             const lastRow = traverseData[traverseData.length - 1];
             const calculatedFinalRL = lastRow && lastRow.rl !== null ? lastRow.rl : null;
-            const misclosure = (calculatedFinalRL !== null && !isNaN(knownClosingBM)) ? calculatedFinalRL - knownClosingBM : null;
+            const misclosure = (calculatedFinalRL !== null && !isNaN(knownClosingBM))
+                ? calculatedFinalRL - knownClosingBM
+                : null;
+
             const totalSetups = traverseData.reduce((count, row) => count + (row.bs !== null ? 1 : 0), 0);
 
             const sheetData = [
@@ -745,7 +1243,9 @@
             const knownClosingBM = parseFloat(document.getElementById('t_close_bm').value);
             const lastRow = traverseData[traverseData.length - 1];
             const calculatedFinalRL = lastRow && lastRow.rl !== null ? lastRow.rl : null;
-            const misclosure = (calculatedFinalRL !== null && !isNaN(knownClosingBM)) ? calculatedFinalRL - knownClosingBM : null;
+            const misclosure = (calculatedFinalRL !== null && !isNaN(knownClosingBM))
+                ? calculatedFinalRL - knownClosingBM
+                : null;
             const totalSetups = traverseData.reduce((count, row) => count + (row.bs !== null ? 1 : 0), 0);
 
             const escapeHtml = value => String(value ?? '')
@@ -816,7 +1316,7 @@ ${rowHtml}
         }
 
         function clearTraverse() {
-            if (confirm('Are you sure you want to clear all traverse data?')) {
+            if(confirm("Are you sure you want to clear all traverse data?")) {
                 traverseData = [];
                 localStorage.removeItem('survey_traverse_draft');
                 document.getElementById('t_start_rl').value = '';
@@ -831,6 +1331,8 @@ ${rowHtml}
             }
         }
 
+        // Initialize & Load Saved State
+        renderAllBMDropdowns();
         loadCheckDraft();
         loadTraverseDraft();
     </script>
