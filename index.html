@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Leveling Pro</title>
     <meta name="theme-color" content="#000000">
-    <link rel="manifest" href='data:application/manifest+json;utf8,{"name":"Leveling Pro","short_name":"Leveling","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#00[...]
+    <link rel="manifest" href='data:application/manifest+json;utf8,{"name":"Leveling Pro","short_name":"Leveling","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#00[...'>
     <style>
         :root {
             --bg-top: #000000;
@@ -17,14 +17,13 @@
             --error: #ff8a80;
             --success: #69f0ae;
             
-            /* High Contrast Colors for Sunlight Visibility */
-            --color-bm: #ffee58; /* Bright Yellow */
-            --color-stn: #ffa726; /* Bright Orange */
-            --color-bs: #69f0ae; /* Bright Green */
-            --color-is: #ff8a80; /* Bright Red */
-            --color-fs: #4fc3f7; /* Bright Blue */
-            --color-design: #ffb74d; /* Bright Amber / Warm Gold */
-            --color-hi: #ffffff; /* Pure White */
+            --color-bm: #ffee58;
+            --color-stn: #ffa726;
+            --color-bs: #69f0ae;
+            --color-is: #ff8a80;
+            --color-fs: #4fc3f7;
+            --color-design: #ffb74d;
+            --color-hi: #ffffff;
             
             --font-family: system-ui, -apple-system, sans-serif;
         }
@@ -99,7 +98,7 @@
             font-size: 18px;
             font-weight: 800;
         }
-        
+
         .lbl-bm { color: var(--color-bm); }
         .lbl-stn { color: var(--color-stn); }
         .lbl-bs { color: var(--color-bs); }
@@ -128,7 +127,7 @@
             outline: none;
             width: 100%;
         }
-        
+
         input.inp-bm { color: var(--color-bm); border-color: rgba(255, 238, 88, 0.3); }
         input.inp-stn { color: var(--color-stn); border-color: rgba(255, 167, 38, 0.3); }
         input.inp-bs { color: var(--color-bs); border-color: rgba(105, 240, 174, 0.3); }
@@ -159,7 +158,7 @@
             margin-top: 5px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
-        
+
         button.action-btn:active {
             transform: scale(0.98);
             background: rgba(255,255,255,0.2);
@@ -209,7 +208,7 @@
             font-size: 18px;
             border-bottom: 2px solid #555;
         }
-        
+
         th.th-stn { color: var(--color-stn); }
         th.th-bs { color: var(--color-bs); }
         th.th-is { color: var(--color-is); }
@@ -260,14 +259,14 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 6px;
         }
-        
+
         .traverse-controls input {
             border-radius: 15px;
             padding: 14px 5px;
             font-size: 20px;
             text-align: center;
         }
-        
+
         footer {
             margin-top: auto;
             text-align: center;
@@ -290,7 +289,6 @@
             }
         }
     </style>
-    <!-- Excel export library -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
@@ -302,7 +300,6 @@
 
     <datalist id="saved-bms"></datalist>
 
-    <!-- MODULE 1: CHECKING LEVELS -->
     <div id="check" class="container active">
         <div class="input-group">
             <div class="input-header">
@@ -338,9 +335,7 @@
         </div>
     </div>
 
-    <!-- MODULE 2: LEVELING TRAVERSE -->
     <div id="traverse" class="container">
-        
         <div class="input-group">
             <label class="lbl-bm" style="padding-left:15px;">Starting Benchmark RL</label>
             <input type="text" inputmode="decimal" id="t_start_rl" class="inp-bm" list="saved-bms" placeholder="Select or enter Starting BM" oninput="saveTraverseDraft()">
@@ -356,7 +351,7 @@
                 <input type="number" id="t_is" class="inp-is" step="0.001" placeholder="IS" oninput="saveTraverseDraft()">
                 <input type="number" id="t_fs" class="inp-fs" step="0.001" placeholder="FS" oninput="saveTraverseDraft()">
             </div>
-            
+
             <div class="grid-inputs" style="margin-top: 15px;">
                 <button class="action-btn" onclick="addTraverseRow()" style="margin-top:0; border-color: var(--accent); color: var(--accent);">+ Add Row</button>
                 <button class="action-btn" onclick="clearTraverse()" style="margin-top:0; color:var(--error); border-color: var(--error);">Clear All</button>
@@ -377,9 +372,7 @@
                         <th class="th-adj">Adj RL</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Rows added dynamically -->
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
 
@@ -390,10 +383,7 @@
                 <button class="action-btn" onclick="closeTraverse()" style="margin-top:0; padding: 0 25px; border-color: var(--success); color: var(--success);">Close Traverse</button>
             </div>
             <div id="t_error_display" style="text-align: center; color: var(--error); font-size: 20px; font-weight: 900; margin-top: 10px;"></div>
-            <button id="download_excel_btn" class="action-btn" onclick="downloadTraverseExcel()"
-                    style="display:none; margin-top:12px; width:100%; border-color:#4caf50; color:#4caf50;">
-                Download Excel
-            </button>
+            <button id="download_excel_btn" class="action-btn" onclick="downloadTraverseExcel()" style="display:none; margin-top:12px; width:100%; border-color:#4caf50; color:#4caf50;">Download Excel</button>
         </div>
     </div>
 
@@ -407,7 +397,6 @@
             event.target.classList.add('active');
         }
 
-        // --- Benchmark Memory System ---
         let savedBMs = JSON.parse(localStorage.getItem('survey_bms_v2') || '[]');
 
         function renderBMList() {
@@ -416,7 +405,7 @@
             savedBMs.forEach(bm => {
                 const option = document.createElement('option');
                 option.value = bm.val;
-                option.label = bm.desc; 
+                option.label = bm.desc;
                 option.innerText = `${bm.val} - ${bm.desc}`;
                 datalist.appendChild(option);
             });
@@ -426,34 +415,30 @@
             if (bmRaw === null || bmRaw.trim() === '') return;
             const parsedVal = parseFloat(bmRaw);
             if (isNaN(parsedVal)) return;
-            
+
             const valStr = parsedVal.toFixed(3);
-            
             const exists = savedBMs.some(bm => bm.val === valStr);
             if (!exists) {
-                let desc = prompt(`New Benchmark Detected: ${valStr}\n\nPlease enter a description for this BM:`, "BM");
-                if (desc === null || desc.trim() === '') {
-                    desc = "Unknown BM";
-                }
-                
+                let desc = prompt(`New Benchmark Detected: ${valStr}\n\nPlease enter a description for this BM:`, 'BM');
+                if (desc === null || desc.trim() === '') desc = 'Unknown BM';
+
                 savedBMs.push({ val: valStr, desc: desc.trim() });
-                savedBMs.sort((a, b) => parseFloat(b.val) - parseFloat(a.val)); 
+                savedBMs.sort((a, b) => parseFloat(b.val) - parseFloat(a.val));
                 localStorage.setItem('survey_bms_v2', JSON.stringify(savedBMs));
                 renderBMList();
             }
         }
 
         function clearSavedBMs() {
-            if(confirm("Delete all saved Benchmarks from the dropdown list?")) {
+            if (confirm('Delete all saved Benchmarks from the dropdown list?')) {
                 savedBMs = [];
                 localStorage.removeItem('survey_bms_v2');
                 renderBMList();
             }
         }
-        
+
         renderBMList();
 
-        // --- Auto-Save & Restore: Check Levels Draft ---
         function saveCheckDraft() {
             const draft = {
                 bm: document.getElementById('c_bm').value,
@@ -475,18 +460,17 @@
                     if (draft.design) document.getElementById('c_design').value = draft.design;
                     if (draft.boardHeight) document.getElementById('c_board_height').value = draft.boardHeight;
                     if (draft.staff) document.getElementById('c_staff_rdg').value = draft.staff;
-                } catch(e) {}
+                } catch (e) {}
             }
         }
 
-        // --- Level Check Logic ---
         function getCheckBasics() {
             const bmRaw = document.getElementById('c_bm').value;
             const bm = parseFloat(bmRaw);
             const bs = parseFloat(document.getElementById('c_bs').value);
 
             if (isNaN(bm) || isNaN(bs)) {
-                alert("Please enter both Benchmark RL and Backsight (BS) first.");
+                alert('Please enter both Benchmark RL and Backsight (BS) first.');
                 return null;
             }
             saveBM(bmRaw);
@@ -496,39 +480,38 @@
         function calcStaff() {
             const basics = getCheckBasics();
             if (!basics) return;
-            
+
             const design = parseFloat(document.getElementById('c_design').value);
             if (isNaN(design)) {
-                alert("Please enter a Design Elevation.");
+                alert('Please enter a Design Elevation.');
                 return;
             }
 
             const boardHeight = parseFloat(document.getElementById('c_board_height').value);
             const adjustment = isNaN(boardHeight) ? 0 : boardHeight;
             const expectedReading = basics.hi - design - adjustment;
-
-            showCheckResult("Expected Staff Reading", expectedReading.toFixed(3), basics.hi, "var(--color-design)");
+            showCheckResult('Expected Staff Reading', expectedReading.toFixed(3), basics.hi, 'var(--color-design)');
         }
 
         function calcElev() {
             const basics = getCheckBasics();
             if (!basics) return;
-            
+
             const staff = parseFloat(document.getElementById('c_staff_rdg').value);
             if (isNaN(staff)) {
-                alert("Please enter a Staff Reading.");
+                alert('Please enter a Staff Reading.');
                 return;
             }
 
             const groundElev = basics.hi - staff;
-            showCheckResult("Actual Ground Elevation (RL)", groundElev.toFixed(3), basics.hi, "var(--color-fs)");
+            showCheckResult('Actual Ground Elevation (RL)', groundElev.toFixed(3), basics.hi, 'var(--color-fs)');
         }
 
         function showCheckResult(label, value, hi, color) {
             const card = document.getElementById('c_result_card');
             card.style.display = 'block';
             card.style.borderColor = color;
-            
+
             const lblEl = document.getElementById('c_result_label');
             lblEl.innerText = label;
             lblEl.style.color = color;
@@ -540,7 +523,6 @@
             document.getElementById('c_hi_display').innerText = `Instrument Height (HOC): ${hi.toFixed(3)}`;
         }
 
-        // --- Traverse State & Auto-Save ---
         let traverseData = [];
 
         function saveTraverseDraft() {
@@ -571,22 +553,20 @@
                         traverseData = draft.rows;
                         renderTable();
                     }
-                } catch(e) {}
+                } catch (e) {}
             }
         }
 
         function addTraverseRow() {
             const startRLRaw = document.getElementById('t_start_rl').value;
             const startRL = parseFloat(startRLRaw);
-            
+
             if (isNaN(startRL) && traverseData.length === 0) {
-                alert("Please select or enter a Starting Benchmark RL first.");
+                alert('Please select or enter a Starting Benchmark RL first.');
                 return;
             }
 
-            if (traverseData.length === 0) {
-                saveBM(startRLRaw);
-            }
+            if (traverseData.length === 0) saveBM(startRLRaw);
 
             const stn = document.getElementById('t_stn').value || `P${traverseData.length + 1}`;
             const bs = parseFloat(document.getElementById('t_bs').value);
@@ -594,14 +574,14 @@
             const fs = parseFloat(document.getElementById('t_fs').value);
 
             if (isNaN(bs) && isNaN(is) && isNaN(fs)) {
-                alert("Please enter at least one reading (BS, IS, or FS).");
+                alert('Please enter at least one reading (BS, IS, or FS).');
                 return;
             }
 
-            let row = { 
-                stn, 
-                bs: isNaN(bs) ? null : bs, 
-                is: isNaN(is) ? null : is, 
+            const row = {
+                stn,
+                bs: isNaN(bs) ? null : bs,
+                is: isNaN(is) ? null : is,
                 fs: isNaN(fs) ? null : fs,
                 hi: null,
                 rl: null,
@@ -615,7 +595,6 @@
             renderTable();
             saveTraverseDraft();
 
-            // Clear inputs for next point
             document.getElementById('t_stn').value = '';
             document.getElementById('t_bs').value = '';
             document.getElementById('t_is').value = '';
@@ -629,38 +608,35 @@
             let setupCount = 0;
 
             for (let i = 0; i < traverseData.length; i++) {
-                let row = traverseData[i];
+                const row = traverseData[i];
 
                 if (i === 0) {
                     row.rl = startRL;
-                    row.setupNum = 0; 
-                    if(row.bs !== null) setupCount = 1;
+                    row.setupNum = 0;
+                    if (row.bs !== null) setupCount = 1;
                 } else {
                     if (row.is !== null && currentHI !== null) {
                         row.rl = currentHI - row.is;
-                        row.setupNum = setupCount; 
+                        row.setupNum = setupCount;
                     } else if (row.fs !== null && currentHI !== null) {
                         row.rl = currentHI - row.fs;
-                        row.setupNum = setupCount; 
+                        row.setupNum = setupCount;
                     } else {
-                        row.rl = lastRL; 
+                        row.rl = lastRL;
                         row.setupNum = setupCount;
                     }
                 }
-                
+
                 if (row.rl !== null) lastRL = row.rl;
 
                 if (row.bs !== null) {
                     currentHI = row.rl + row.bs;
                     row.hi = currentHI;
-                    
-                    if (i !== 0) {
-                        setupCount++; 
-                    }
+                    if (i !== 0) setupCount++;
                 } else {
-                    row.hi = null; 
+                    row.hi = null;
                 }
-                
+
                 row.corr = 0;
                 row.adj_rl = row.rl;
             }
@@ -671,9 +647,9 @@
 
             const closingBMRaw = document.getElementById('t_close_bm').value;
             const knownClosingBM = parseFloat(closingBMRaw);
-            
+
             if (isNaN(knownClosingBM)) {
-                alert("Please select or enter a valid Known Closing Benchmark.");
+                alert('Please select or enter a valid Known Closing Benchmark.');
                 return;
             }
 
@@ -681,25 +657,22 @@
 
             const lastRow = traverseData[traverseData.length - 1];
             if (lastRow.rl === null) return;
-            
+
             const calculatedFinalRL = lastRow.rl;
             const misclosure = calculatedFinalRL - knownClosingBM;
-            
+
             let totalSetups = 0;
             traverseData.forEach(r => {
                 if (r.bs !== null) totalSetups++;
             });
-            
-            let divisor = Math.max(1, totalSetups);
-            let correctionPerSetup = -misclosure / divisor;
+
+            const divisor = Math.max(1, totalSetups);
+            const correctionPerSetup = -misclosure / divisor;
 
             for (let i = 0; i < traverseData.length; i++) {
-                let row = traverseData[i];
+                const row = traverseData[i];
                 row.corr = row.setupNum * correctionPerSetup;
-                
-                if (row.rl !== null) {
-                    row.adj_rl = row.rl + row.corr;
-                }
+                if (row.rl !== null) row.adj_rl = row.rl + row.corr;
             }
 
             document.getElementById('t_error_display').innerText = `Misclosure: ${misclosure.toFixed(4)}m`;
@@ -710,7 +683,7 @@
 
         function downloadTraverseExcel() {
             if (traverseData.length === 0) {
-                alert("There is no traverse data to export.");
+                alert('There is no traverse data to export.');
                 return;
             }
 
@@ -723,10 +696,7 @@
             const knownClosingBM = parseFloat(document.getElementById('t_close_bm').value);
             const lastRow = traverseData[traverseData.length - 1];
             const calculatedFinalRL = lastRow && lastRow.rl !== null ? lastRow.rl : null;
-            const misclosure = (calculatedFinalRL !== null && !isNaN(knownClosingBM))
-                ? calculatedFinalRL - knownClosingBM
-                : null;
-
+            const misclosure = (calculatedFinalRL !== null && !isNaN(knownClosingBM)) ? calculatedFinalRL - knownClosingBM : null;
             const totalSetups = traverseData.reduce((count, row) => count + (row.bs !== null ? 1 : 0), 0);
 
             const sheetData = [
@@ -775,9 +745,7 @@
             const knownClosingBM = parseFloat(document.getElementById('t_close_bm').value);
             const lastRow = traverseData[traverseData.length - 1];
             const calculatedFinalRL = lastRow && lastRow.rl !== null ? lastRow.rl : null;
-            const misclosure = (calculatedFinalRL !== null && !isNaN(knownClosingBM))
-                ? calculatedFinalRL - knownClosingBM
-                : null;
+            const misclosure = (calculatedFinalRL !== null && !isNaN(knownClosingBM)) ? calculatedFinalRL - knownClosingBM : null;
             const totalSetups = traverseData.reduce((count, row) => count + (row.bs !== null ? 1 : 0), 0);
 
             const escapeHtml = value => String(value ?? '')
@@ -848,7 +816,7 @@ ${rowHtml}
         }
 
         function clearTraverse() {
-            if(confirm("Are you sure you want to clear all traverse data?")) {
+            if (confirm('Are you sure you want to clear all traverse data?')) {
                 traverseData = [];
                 localStorage.removeItem('survey_traverse_draft');
                 document.getElementById('t_start_rl').value = '';
@@ -863,7 +831,6 @@ ${rowHtml}
             }
         }
 
-        // Load existing drafts on startup
         loadCheckDraft();
         loadTraverseDraft();
     </script>
