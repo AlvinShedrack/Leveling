@@ -539,6 +539,9 @@
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('check')">Check Levels</button>
         <button class="tab-btn" onclick="switchTab('traverse')">Leveling</button>
+        <button class="btn-link" onclick="openBMManager()" style="padding: 3px 8px; font-size: 11px;">
+                        ⚙️ BMs
+        </button>
     </div>
 
     <!-- MODULE 1: CHECKING LEVELS -->
@@ -547,10 +550,8 @@
         <div class="grid-inputs">
             <div class="input-group">
                 <div class="input-header">
-                    <label class="lbl-bm">Benchmark RL</label>
-                    <button class="btn-link" onclick="openBMManager()" style="padding: 3px 8px; font-size: 11px;">
-                        ⚙️ BMs
-                    </button>
+                    <label class="lbl-bm">BM RL</label>
+
                 </div>
                 
                 <!-- BM Combo Selector Component -->
@@ -567,7 +568,7 @@
 
             <div class="input-group">
                 <div class="input-header">
-                    <label class="lbl-bs">Backsight (BS)</label>
+                    <label class="lbl-bs">BS</label>
                 </div>
                 <input type="number" id="c_bs" class="inp-bs" step="0.001" placeholder="e.g. 1.250" oninput="saveCheckDraft()">
             </div>
@@ -577,7 +578,7 @@
         <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-top: 5px;">
             <div class="mode-switch">
                 <button id="mode_staff_btn" class="mode-btn btn-staff active" onclick="setCalcMode('staff')">Find Staff Reading</button>
-                <button id="mode_rl_btn" class="mode-btn btn-rl" onclick="setCalcMode('rl')">Find Ground RL</button>
+                <button id="mode_rl_btn" class="mode-btn btn-rl" onclick="setCalcMode('rl')">Find RL</button>
             </div>
 
             <!-- Mode A: Find Staff Reading (2-Column Grid for Board Height & Design RL) -->
@@ -585,10 +586,10 @@
                 <div class="grid-inputs">
                     <div class="input-group">
                         <label class="lbl-board" style="font-size: 15px;">Board Height (m)</label>
-                        <input type="number" id="c_board_h" class="inp-board" step="0.001" placeholder="0.000" oninput="saveCheckDraft()">
+                        <input type="number" id="c_board_h" class="inp-board" step="0.001" placeholder="Optional" oninput="saveCheckDraft()">
                     </div>
                     <div class="input-group">
-                        <label class="lbl-design" style="font-size: 15px;">Target / Design RL</label>
+                        <label class="lbl-design" style="font-size: 15px;">Design RL</label>
                         <input type="number" id="c_design" class="inp-design" step="0.001" placeholder="Target RL" oninput="saveCheckDraft()">
                     </div>
                 </div>
@@ -601,7 +602,7 @@
                     <label class="lbl-fs" style="padding-left:5px; font-size: 16px;">Staff Reading</label>
                     <input type="number" id="c_staff_rdg" class="inp-fs" step="0.001" placeholder="Enter Staff Reading" oninput="saveCheckDraft()">
                 </div>
-                <button class="action-btn" onclick="calcElev()" style="border-color: var(--color-fs); color: var(--color-fs);">Get Ground RL</button>
+                <button class="action-btn" onclick="calcElev()" style="border-color: var(--color-fs); color: var(--color-fs);">Get RL</button>
             </div>
         </div>
 
@@ -989,7 +990,7 @@
             }
 
             const groundElev = basics.hi - staff;
-            showCheckResult("Actual Ground Elevation (RL)", groundElev.toFixed(3), basics.hi, "var(--color-fs)");
+            showCheckResult("Actual Elevation (RL)", groundElev.toFixed(3), basics.hi, "var(--color-fs)");
         }
 
         function showCheckResult(label, value, hi, color) {
