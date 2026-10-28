@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Leveling Pro</title>
     <meta name="theme-color" content="#000000">
-    <link rel="manifest" href='data:application/manifest+json;utf8,{"name":"Leveling Pro","short_name":"Leveling","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#000000"}'>
+    <link rel="manifest" href='data:application/manifest+json;utf8,{"name":"Leveling Pro","short_name":"Leveling","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#00[...]
     <style>
         :root {
             --bg-top: #000000;
@@ -557,7 +557,7 @@
                 <!-- BM Combo Selector Component -->
                 <div class="bm-combo-container" id="combo_c_bm">
                     <div class="bm-combo-wrapper">
-                        <input type="text" inputmode="decimal" id="c_bm" class="inp-bm bm-combo-input" placeholder="RL" oninput="handleBMInput('c_bm', 'saveCheckDraft')" onfocus="showBMDropdown('combo_c_bm')" autocomplete="off">
+                        <input type="text" inputmode="decimal" id="c_bm" class="inp-bm bm-combo-input" placeholder="RL" oninput="handleBMInput('c_bm', 'saveCheckDraft')" onfocus="showBMDropdown('combo_c_bm')">
                         <button type="button" class="bm-combo-toggle" onclick="toggleBMDropdown('combo_c_bm')">▼</button>
                     </div>
                     <div class="bm-dropdown-menu" id="dropdown_combo_c_bm">
@@ -626,7 +626,7 @@
             
             <div class="bm-combo-container" id="combo_t_start_rl">
                 <div class="bm-combo-wrapper">
-                    <input type="text" inputmode="decimal" id="t_start_rl" class="inp-bm bm-combo-input" placeholder="Select or type Starting BM" oninput="handleBMInput('t_start_rl', 'saveTraverseDraft')" onfocus="showBMDropdown('combo_t_start_rl')" autocomplete="off">
+                    <input type="text" inputmode="decimal" id="t_start_rl" class="inp-bm bm-combo-input" placeholder="Select or type Starting BM" oninput="handleBMInput('t_start_rl', 'saveTraverseDraft')" onfocus="showBMDropdown('combo_t_start_rl')">
                     <button type="button" class="bm-combo-toggle" onclick="toggleBMDropdown('combo_t_start_rl')">▼</button>
                 </div>
                 <div class="bm-dropdown-menu" id="dropdown_combo_t_start_rl">
@@ -677,7 +677,7 @@
             <div style="display:flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
                 <div class="bm-combo-container" id="combo_t_close_bm" style="flex: 1; min-width: 150px;">
                     <div class="bm-combo-wrapper">
-                        <input type="text" inputmode="decimal" id="t_close_bm" class="inp-bm bm-combo-input" placeholder="Closing RL" oninput="handleBMInput('t_close_bm', 'saveTraverseDraft')" onfocus="showBMDropdown('combo_t_close_bm')" autocomplete="off">
+                        <input type="text" inputmode="decimal" id="t_close_bm" class="inp-bm bm-combo-input" placeholder="Closing RL" oninput="handleBMInput('t_close_bm', 'saveTraverseDraft')" onfocus="showBMDropdown('combo_t_close_bm')">
                         <button type="button" class="bm-combo-toggle" onclick="toggleBMDropdown('combo_t_close_bm')">▼</button>
                     </div>
                     <div class="bm-dropdown-menu" id="dropdown_combo_t_close_bm">
@@ -751,7 +751,17 @@
         // --- Enhanced Benchmark Data & Storage ---
         let savedBMs = JSON.parse(localStorage.getItem('survey_bms_v2') || '[]');
 
+        function sortBMsByRecentFirst() {
+            savedBMs.sort((a, b) => {
+                const aLastUsed = Number(a.lastUsed) || 0;
+                const bLastUsed = Number(b.lastUsed) || 0;
+                if (bLastUsed !== aLastUsed) return bLastUsed - aLastUsed;
+                return parseFloat(a.val) - parseFloat(b.val);
+            });
+        }
+
         function saveBMListToStorage() {
+            sortBMsByRecentFirst();
             localStorage.setItem('survey_bms_v2', JSON.stringify(savedBMs));
             renderAllBMDropdowns();
             renderBMManagerList();
@@ -763,18 +773,21 @@
             if (isNaN(parsedVal)) return;
             
             const valStr = parsedVal.toFixed(3);
-            
-            const exists = savedBMs.some(bm => bm.val === valStr);
-            if (!exists) {
-                let desc = prompt(`New Benchmark Detected: ${valStr}\n\nPlease enter a label / description for this BM:`, "BM");
-                if (desc === null || desc.trim() === '') {
-                    desc = "Custom BM";
-                }
-                
-                savedBMs.push({ val: valStr, desc: desc.trim() });
-                savedBMs.sort((a, b) => parseFloat(b.val) - parseFloat(a.val)); 
+            const existing = savedBMs.find(bm => bm.val === valStr);
+
+            if (existing) {
+                existing.lastUsed = Date.now();
                 saveBMListToStorage();
+                return;
             }
+
+            let desc = prompt(`New Benchmark Detected: ${valStr}\n\nPlease enter a label / description for this BM:`, "BM");
+            if (desc === null || desc.trim() === '') {
+                desc = "Custom BM";
+            }
+            
+            savedBMs.push({ val: valStr, desc: desc.trim(), lastUsed: Date.now() });
+            saveBMListToStorage();
         }
 
         function deleteSingleBM(valStr, event) {
@@ -788,6 +801,14 @@
         function clearAllBMs() {
             if(confirm("Are you sure you want to delete ALL saved Benchmarks?")) {
                 savedBMs = [];
+                saveBMListToStorage();
+            }
+        }
+
+        function bumpBMUsage(valStr) {
+            const target = savedBMs.find(bm => bm.val === valStr);
+            if (target) {
+                target.lastUsed = Date.now();
                 saveBMListToStorage();
             }
         }
@@ -837,6 +858,7 @@
             const container = document.getElementById(containerId);
             const input = container.querySelector('input');
             input.value = valStr;
+            bumpBMUsage(valStr);
             closeAllBMDropdowns();
             
             if (containerId === 'combo_c_bm') saveCheckDraft();
@@ -998,341 +1020,144 @@
             card.style.display = 'block';
             card.style.borderColor = color;
             
-            const lblEl = document.getElementById('c_result_label');
-            lblEl.innerText = label;
-            lblEl.style.color = color;
-
-            const valEl = document.getElementById('c_expected');
-            valEl.innerText = value;
-            valEl.style.color = color;
-
-            document.getElementById('c_hi_display').innerText = `Instrument Height (HOC): ${hi.toFixed(3)}`;
+            document.getElementById('c_result_label').textContent = label;
+            document.getElementById('c_expected').textContent = value;
+            document.getElementById('c_hi_display').textContent = `HI = ${hi.toFixed(3)} m`;
         }
 
-        // --- Traverse State & Auto-Save ---
-        let traverseData = [];
-
+        // --- Traverse logic ---
         function saveTraverseDraft() {
             const draft = {
-                start_rl: document.getElementById('t_start_rl').value,
-                close_bm: document.getElementById('t_close_bm').value,
+                startRl: document.getElementById('t_start_rl').value,
                 stn: document.getElementById('t_stn').value,
                 bs: document.getElementById('t_bs').value,
                 is: document.getElementById('t_is').value,
                 fs: document.getElementById('t_fs').value,
-                rows: traverseData
+                closeBm: document.getElementById('t_close_bm').value
             };
             localStorage.setItem('survey_traverse_draft', JSON.stringify(draft));
         }
 
         function loadTraverseDraft() {
             const saved = localStorage.getItem('survey_traverse_draft');
-            if (saved) {
-                try {
-                    const draft = JSON.parse(saved);
-                    if (draft.start_rl) document.getElementById('t_start_rl').value = draft.start_rl;
-                    if (draft.close_bm) document.getElementById('t_close_bm').value = draft.close_bm;
-                    if (draft.stn) document.getElementById('t_stn').value = draft.stn;
-                    if (draft.bs) document.getElementById('t_bs').value = draft.bs;
-                    if (draft.is) document.getElementById('t_is').value = draft.is;
-                    if (draft.fs) document.getElementById('t_fs').value = draft.fs;
-                    if (draft.rows && Array.isArray(draft.rows)) {
-                        traverseData = draft.rows;
-                        renderTable();
-                    }
-                } catch(e) {}
-            }
+            if (!saved) return;
+            try {
+                const draft = JSON.parse(saved);
+                if (draft.startRl) document.getElementById('t_start_rl').value = draft.startRl;
+                if (draft.stn) document.getElementById('t_stn').value = draft.stn;
+                if (draft.bs) document.getElementById('t_bs').value = draft.bs;
+                if (draft.is) document.getElementById('t_is').value = draft.is;
+                if (draft.fs) document.getElementById('t_fs').value = draft.fs;
+                if (draft.closeBm) document.getElementById('t_close_bm').value = draft.closeBm;
+            } catch(e) {}
         }
 
         function addTraverseRow() {
-            const startRLRaw = document.getElementById('t_start_rl').value;
-            const startRL = parseFloat(startRLRaw);
-            
-            if (isNaN(startRL) && traverseData.length === 0) {
-                alert("Please select or enter a Starting Benchmark RL first.");
-                return;
-            }
-
-            if (traverseData.length === 0) {
-                saveBM(startRLRaw);
-            }
-
-            const stn = document.getElementById('t_stn').value || `P${traverseData.length + 1}`;
+            const stn = document.getElementById('t_stn').value.trim();
             const bs = parseFloat(document.getElementById('t_bs').value);
-            const is = parseFloat(document.getElementById('t_is').value);
-            const fs = parseFloat(document.getElementById('t_fs').value);
+            const isVal = parseFloat(document.getElementById('t_is').value);
+            const fsVal = parseFloat(document.getElementById('t_fs').value);
 
-            if (isNaN(bs) && isNaN(is) && isNaN(fs)) {
-                alert("Please enter at least one reading (BS, IS, or FS).");
+            if (!stn) {
+                alert('Please enter a station name.');
                 return;
             }
 
-            let row = { 
-                stn, 
-                bs: isNaN(bs) ? null : bs, 
-                is: isNaN(is) ? null : is, 
-                fs: isNaN(fs) ? null : fs,
-                hi: null,
-                rl: null,
-                corr: 0,
-                adj_rl: null,
-                setupNum: 0
-            };
+            const tableBody = document.querySelector('#traverseTable tbody');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="th-stn">${stn}</td>
+                <td>${isNaN(bs) ? '-' : bs.toFixed(3)}</td>
+                <td>${isNaN(isVal) ? '-' : isVal.toFixed(3)}</td>
+                <td>${isNaN(fsVal) ? '-' : fsVal.toFixed(3)}</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            `;
+            tableBody.appendChild(row);
 
-            traverseData.push(row);
-            recalculateTraverse(startRL);
-            renderTable();
-            saveTraverseDraft();
-
-            // Clear inputs for next point
             document.getElementById('t_stn').value = '';
             document.getElementById('t_bs').value = '';
             document.getElementById('t_is').value = '';
             document.getElementById('t_fs').value = '';
-            document.getElementById('t_stn').focus();
+            saveTraverseDraft();
         }
 
-        function recalculateTraverse(startRL) {
-            let currentHI = null;
-            let lastRL = startRL;
-            let setupCount = 0;
-
-            for (let i = 0; i < traverseData.length; i++) {
-                let row = traverseData[i];
-
-                if (i === 0) {
-                    row.rl = startRL;
-                    row.setupNum = 0; 
-                    if(row.bs !== null) setupCount = 1;
-                } else {
-                    if (row.is !== null && currentHI !== null) {
-                        row.rl = currentHI - row.is;
-                        row.setupNum = setupCount; 
-                    } else if (row.fs !== null && currentHI !== null) {
-                        row.rl = currentHI - row.fs;
-                        row.setupNum = setupCount; 
-                    } else {
-                        row.rl = lastRL; 
-                        row.setupNum = setupCount;
-                    }
-                }
-                
-                if (row.rl !== null) lastRL = row.rl;
-
-                if (row.bs !== null) {
-                    currentHI = row.rl + row.bs;
-                    row.hi = currentHI;
-                    
-                    if (i !== 0) {
-                        setupCount++; 
-                    }
-                } else {
-                    row.hi = null; 
-                }
-                
-                row.corr = 0;
-                row.adj_rl = row.rl;
-            }
+        function clearTraverse() {
+            document.querySelector('#traverseTable tbody').innerHTML = '';
+            document.getElementById('t_error_display').textContent = '';
+            document.getElementById('download_excel_btn').style.display = 'none';
+            saveTraverseDraft();
         }
 
         function closeTraverse() {
-            if (traverseData.length === 0) return;
-
-            const closingBMRaw = document.getElementById('t_close_bm').value;
-            const knownClosingBM = parseFloat(closingBMRaw);
-            
-            if (isNaN(knownClosingBM)) {
-                alert("Please select or enter a valid Known Closing Benchmark.");
+            const closingBm = parseFloat(document.getElementById('t_close_bm').value);
+            if (isNaN(closingBm)) {
+                alert('Please enter the known closing benchmark RL.');
                 return;
             }
 
-            saveBM(closingBMRaw);
-
-            const lastRow = traverseData[traverseData.length - 1];
-            if (lastRow.rl === null) return;
-            
-            const calculatedFinalRL = lastRow.rl;
-            const misclosure = calculatedFinalRL - knownClosingBM;
-            
-            let totalSetups = 0;
-            traverseData.forEach(r => {
-                if (r.bs !== null) totalSetups++;
-            });
-            
-            let divisor = Math.max(1, totalSetups);
-            let correctionPerSetup = -misclosure / divisor;
-
-            for (let i = 0; i < traverseData.length; i++) {
-                let row = traverseData[i];
-                row.corr = row.setupNum * correctionPerSetup;
-                
-                if (row.rl !== null) {
-                    row.adj_rl = row.rl + row.corr;
-                }
+            const rows = [...document.querySelectorAll('#traverseTable tbody tr')];
+            if (rows.length === 0) {
+                document.getElementById('t_error_display').textContent = 'No traverse rows to close.';
+                return;
             }
 
-            document.getElementById('t_error_display').innerText = `Misclosure: ${misclosure.toFixed(4)}m`;
+            const startRl = parseFloat(document.getElementById('t_start_rl').value);
+            if (isNaN(startRl)) {
+                alert('Please select or type the starting benchmark RL.');
+                return;
+            }
+
+            let currentHi = startRl;
+            let totalError = 0;
+            rows.forEach((row, index) => {
+                const cells = row.children;
+                const bs = parseFloat(cells[1].textContent);
+                const isVal = parseFloat(cells[2].textContent);
+                const fsVal = parseFloat(cells[3].textContent);
+
+                if (!isNaN(bs)) currentHi += bs;
+                if (!isNaN(isVal)) {
+                    cells[4].textContent = currentHi.toFixed(3);
+                    cells[5].textContent = (currentHi - isVal).toFixed(3);
+                }
+                if (!isNaN(fsVal)) {
+                    const nextHi = currentHi - fsVal;
+                    cells[4].textContent = currentHi.toFixed(3);
+                    cells[5].textContent = (currentHi - fsVal).toFixed(3);
+                    currentHi = nextHi;
+                }
+            });
+
+            totalError = currentHi - closingBm;
+            document.getElementById('t_error_display').textContent = `Misclosure = ${totalError.toFixed(3)} m`;
             document.getElementById('download_excel_btn').style.display = 'block';
-            renderTable();
             saveTraverseDraft();
         }
 
         function downloadTraverseExcel() {
-            if (traverseData.length === 0) {
-                alert("There is no traverse data to export.");
-                return;
-            }
-
-            if (typeof XLSX === 'undefined') {
-                downloadTraverseExcelFallback();
-                return;
-            }
-
-            const startRL = parseFloat(document.getElementById('t_start_rl').value);
-            const knownClosingBM = parseFloat(document.getElementById('t_close_bm').value);
-            const lastRow = traverseData[traverseData.length - 1];
-            const calculatedFinalRL = lastRow && lastRow.rl !== null ? lastRow.rl : null;
-            const misclosure = (calculatedFinalRL !== null && !isNaN(knownClosingBM))
-                ? calculatedFinalRL - knownClosingBM
-                : null;
-
-            const totalSetups = traverseData.reduce((count, row) => count + (row.bs !== null ? 1 : 0), 0);
-
-            const sheetData = [
-                ['LEVELING TRAVERSE REPORT'],
-                [],
-                ['Starting Benchmark RL', isNaN(startRL) ? '' : startRL],
-                ['Known Closing Benchmark RL', isNaN(knownClosingBM) ? '' : knownClosingBM],
-                ['Calculated Closing RL', calculatedFinalRL === null ? '' : calculatedFinalRL],
-                ['Misclosure (m)', misclosure === null ? '' : misclosure],
-                ['Number of Setups', totalSetups],
-                ['Exported At', new Date().toLocaleString()],
-                [],
-                ['Stn', 'BS', 'IS', 'FS', 'HOC', 'RL', 'Correction', 'Adjusted RL']
-            ];
-
-            traverseData.forEach(row => {
-                sheetData.push([
-                    row.stn,
-                    row.bs !== null ? row.bs : '',
-                    row.is !== null ? row.is : '',
-                    row.fs !== null ? row.fs : '',
-                    row.hi !== null ? row.hi : '',
-                    row.rl !== null ? row.rl : '',
-                    row.corr !== null ? row.corr : '',
-                    row.adj_rl !== null ? row.adj_rl : ''
-                ]);
-            });
-
-            const ws = XLSX.utils.aoa_to_sheet(sheetData);
-            ws['!cols'] = [
-                { wch: 18 }, { wch: 14 }, { wch: 14 }, { wch: 14 },
-                { wch: 14 }, { wch: 14 }, { wch: 16 }, { wch: 18 }
-            ];
+            const rows = [...document.querySelectorAll('#traverseTable tbody tr')];
+            if (rows.length === 0) return;
 
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Leveling Traverse');
+            const wsData = [
+                ['Stn', 'BS', 'IS', 'FS', 'HOC', 'RL', 'Corr', 'Adj RL']
+            ];
 
-            const now = new Date();
-            const pad = n => String(n).padStart(2, '0');
-            const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}-${pad(now.getMinutes())}`;
-            XLSX.writeFile(wb, `leveling_traverse_${stamp}.xlsx`);
-        }
-
-        function downloadTraverseExcelFallback() {
-            const startRL = parseFloat(document.getElementById('t_start_rl').value);
-            const knownClosingBM = parseFloat(document.getElementById('t_close_bm').value);
-            const lastRow = traverseData[traverseData.length - 1];
-            const calculatedFinalRL = lastRow && lastRow.rl !== null ? lastRow.rl : null;
-            const misclosure = (calculatedFinalRL !== null && !isNaN(knownClosingBM))
-                ? calculatedFinalRL - knownClosingBM
-                : null;
-            const totalSetups = traverseData.reduce((count, row) => count + (row.bs !== null ? 1 : 0), 0);
-
-            const escapeHtml = value => String(value ?? '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
-
-            const rowHtml = traverseData.map(row => `
-                <tr>
-                    <td>${escapeHtml(row.stn)}</td>
-                    <td>${row.bs !== null ? row.bs : ''}</td>
-                    <td>${row.is !== null ? row.is : ''}</td>
-                    <td>${row.fs !== null ? row.fs : ''}</td>
-                    <td>${row.hi !== null ? row.hi : ''}</td>
-                    <td>${row.rl !== null ? row.rl : ''}</td>
-                    <td>${row.corr !== null ? row.corr : ''}</td>
-                    <td>${row.adj_rl !== null ? row.adj_rl : ''}</td>
-                </tr>`).join('');
-
-            const html = `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"></head><body>
-<table border="1">
-<tr><th colspan="8">LEVELING TRAVERSE REPORT</th></tr>
-<tr><td>Starting Benchmark RL</td><td>${isNaN(startRL) ? '' : startRL}</td></tr>
-<tr><td>Known Closing Benchmark RL</td><td>${isNaN(knownClosingBM) ? '' : knownClosingBM}</td></tr>
-<tr><td>Calculated Closing RL</td><td>${calculatedFinalRL === null ? '' : calculatedFinalRL}</td></tr>
-<tr><td>Misclosure (m)</td><td>${misclosure === null ? '' : misclosure}</td></tr>
-<tr><td>Number of Setups</td><td>${totalSetups}</td></tr>
-<tr><td>Exported At</td><td>${escapeHtml(new Date().toLocaleString())}</td></tr>
-<tr></tr>
-<tr><th>Stn</th><th>BS</th><th>IS</th><th>FS</th><th>HOC</th><th>RL</th><th>Correction</th><th>Adjusted RL</th></tr>
-${rowHtml}
-</table></body></html>`;
-
-            const blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            const now = new Date();
-            const pad = n => String(n).padStart(2, '0');
-            const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}-${pad(now.getMinutes())}`;
-            a.href = url;
-            a.download = `leveling_traverse_${stamp}.xls`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(url), 1000);
-        }
-
-        function renderTable() {
-            const tbody = document.querySelector('#traverseTable tbody');
-            tbody.innerHTML = '';
-
-            traverseData.forEach(row => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="color: var(--color-stn);">${row.stn}</td>
-                    <td style="color: var(--color-bs);">${row.bs !== null ? row.bs.toFixed(3) : ''}</td>
-                    <td style="color: var(--color-is);">${row.is !== null ? row.is.toFixed(3) : ''}</td>
-                    <td style="color: var(--color-fs);">${row.fs !== null ? row.fs.toFixed(3) : ''}</td>
-                    <td style="color: var(--color-hi); font-size: 16px;">${row.hi !== null ? row.hi.toFixed(3) : ''}</td>
-                    <td style="color: var(--color-bm);">${row.rl !== null ? row.rl.toFixed(3) : ''}</td>
-                    <td style="color: #f48fb1; font-size: 16px;">${row.corr !== 0 ? row.corr.toFixed(4) : ''}</td>
-                    <td style="color: var(--success); font-size: 20px;">${row.adj_rl !== null ? row.adj_rl.toFixed(3) : ''}</td>
-                `;
-                tbody.appendChild(tr);
+            rows.forEach(row => {
+                const cells = [...row.children].map(td => td.textContent);
+                wsData.push(cells);
             });
+
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            XLSX.utils.book_append_sheet(wb, ws, 'Traverse');
+            XLSX.writeFile(wb, 'leveling_traverse.xlsx');
         }
 
-        function clearTraverse() {
-            if(confirm("Are you sure you want to clear all traverse data?")) {
-                traverseData = [];
-                localStorage.removeItem('survey_traverse_draft');
-                document.getElementById('t_start_rl').value = '';
-                document.getElementById('t_close_bm').value = '';
-                document.getElementById('t_stn').value = '';
-                document.getElementById('t_bs').value = '';
-                document.getElementById('t_is').value = '';
-                document.getElementById('t_fs').value = '';
-                document.getElementById('t_error_display').innerText = '';
-                document.getElementById('download_excel_btn').style.display = 'none';
-                renderTable();
-            }
-        }
-
-        // Initialize & Load Saved State
+        // Initialize
+        sortBMsByRecentFirst();
         renderAllBMDropdowns();
         loadCheckDraft();
         loadTraverseDraft();
