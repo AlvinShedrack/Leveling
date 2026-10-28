@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Leveling Pro</title>
     <meta name="theme-color" content="#000000">
-    <link rel="manifest" href='data:application/manifest+json;utf8,{"name":"Leveling Pro","short_name":"Leveling","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#00[...]
+    <link rel="manifest" href='data:application/manifest+json;utf8,{"name":"Leveling Pro","short_name":"Leveling","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#000000"}'>
     <style>
         :root {
             --bg-top: #000000;
@@ -350,6 +350,283 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            font-size: 18px;
+            white-space: nowrap;
+        }
+
+        th, td {
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            font-weight: 700;
+        }
+
+        th {
+            font-weight: 900;
+            font-size: 18px;
+            border-bottom: 2px solid #555;
+        }
+        
+        th.th-stn { color: var(--color-stn); }
+        th.th-bs { color: var(--color-bs); }
+        th.th-is { color: var(--color-is); }
+        th.th-fs { color: var(--color-fs); }
+        th.th-hi { color: var(--color-hi); }
+        th.th-rl { color: var(--color-bm); }
+        th.th-corr { color: #f48fb1; }
+        th.th-adj { color: var(--success); }
+
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .traverse-controls {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+        
+        .traverse-controls input {
+            border-radius: 15px;
+            padding: 14px 5px;
+            font-size: 20px;
+            text-align: center;
+        }
+        
+        /* Modal Popup Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: #212328;
+            border: 2px solid var(--color-bm);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 450px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+        }
+
+        .modal-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            color: var(--color-bm);
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .modal-close {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .modal-body {
+            padding: 15px 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .bm-manager-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bm-mgr-item {
+            background: #18191c;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bm-mgr-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bm-mgr-val {
+            color: var(--color-bm);
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .bm-mgr-desc {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .bm-mgr-del-btn {
+            background: rgba(255, 138, 128, 0.15);
+            color: var(--error);
+            border: 1px solid var(--error);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .bm-mgr-del-btn:hover {
+            background: var(--error);
+            color: #000;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            gap: 10px;
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 900;
+            color: #ffa726;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            border-top: 2px solid rgba(255,255,255,0.2);
+            position: sticky;
+            bottom: 0;
+            z-index: 100;
+        }
+    </style>
+    <!-- Excel export library -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('check')">Check Levels</button>
+        <button class="tab-btn" onclick="switchTab('traverse')">Leveling</button>
+        <button class="btn-link" onclick="openBMManager()" style="padding: 3px 8px; font-size: 11px;">
+                        ⚙️ BMs
+        </button>
+    </div>
+
+    <!-- MODULE 1: CHECKING LEVELS -->
+    <div id="check" class="container active">
+        <!-- 2-Column Grid for Benchmark RL & Backsight Reading -->
+        <div class="grid-inputs">
+            <div class="input-group">
+                <div class="input-header">
+                    <label class="lbl-bm">BM RL</label>
+
+                </div>
+                
+                <!-- BM Combo Selector Component -->
+                <div class="bm-combo-container" id="combo_c_bm">
+                    <div class="bm-combo-wrapper">
+                        <input type="text" inputmode="decimal" id="c_bm" class="inp-bm bm-combo-input" placeholder="RL" oninput="handleBMInput('c_bm', 'saveCheckDraft')" onfocus="showBMDropdown('combo_c_bm')" autocomplete="off">
+                        <button type="button" class="bm-combo-toggle" onclick="toggleBMDropdown('combo_c_bm')">▼</button>
+                    </div>
+                    <div class="bm-dropdown-menu" id="dropdown_combo_c_bm">
+                        <!-- Dropdown options populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="input-header">
+                    <label class="lbl-bs">BS</label>
+                </div>
+                <input type="number" id="c_bs" class="inp-bs" step="0.001" placeholder="e.g. 1.250" oninput="saveCheckDraft()">
+            </div>
+        </div>
+
+        <!-- Mode Switch Section -->
+        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-top: 5px;">
+            <div class="mode-switch">
+                <button id="mode_staff_btn" class="mode-btn btn-staff active" onclick="setCalcMode('staff')">Find Staff Reading</button>
+                <button id="mode_rl_btn" class="mode-btn btn-rl" onclick="setCalcMode('rl')">Find RL</button>
+            </div>
+
+            <!-- Mode A: Find Staff Reading (2-Column Grid for Board Height & Design RL) -->
+            <div id="calc_staff_section" style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+                <div class="grid-inputs">
+                    <div class="input-group">
+                        <label class="lbl-board" style="font-size: 15px;">Board Height (m)</label>
+                        <input type="number" id="c_board_h" class="inp-board" step="0.001" placeholder="Optional" oninput="saveCheckDraft()">
+                    </div>
+                    <div class="input-group">
+                        <label class="lbl-design" style="font-size: 15px;">Design RL</label>
+                        <input type="number" id="c_design" class="inp-design" step="0.001" placeholder="Target RL" oninput="saveCheckDraft()">
+                    </div>
+                </div>
+                <button class="action-btn" onclick="calcStaff()" style="border-color: var(--color-design); color: var(--color-design);">Get Staff Reading</button>
+            </div>
+
+            <!-- Mode B: Find Ground RL -->
+            <div id="calc_rl_section" style="display: none; flex-direction: column; gap: 12px; margin-top: 10px;">
+                <div class="input-group">
+                    <label class="lbl-fs" style="padding-left:5px; font-size: 16px;">Staff Reading</label>
+                    <input type="number" id="c_staff_rdg" class="inp-fs" step="0.001" placeholder="Enter Staff Reading" oninput="saveCheckDraft()">
+                </div>
+                <button class="action-btn" onclick="calcElev()" style="border-color: var(--color-fs); color: var(--color-fs);">Get RL</button>
+            </div>
+        </div>
+
+        <div class="result-card" id="c_result_card" style="display:none;">
+            <div id="c_result_label" style="color: #ffffff; font-size: 20px; font-weight: 800;">Result</div>
+            <div class="result-val" id="c_expected">-</div>
+            <div style="font-size: 18px; color: var(--color-hi); margin-top: 10px; font-weight: 900;" id="c_hi_display"></div>
+        </div>
+    </div>
+
+    <!-- MODULE 2: LEVELING TRAVERSE -->
+    <div id="traverse" class="container">
+        
+        <div class="input-group">
+            <div class="input-header">
+                <label class="lbl-bm">Starting Benchmark RL</label>
+                <button class="btn-link" onclick="openBMManager()">
+                    ⚙️ Manage BMs
+                </button>
+            </div>
+            
+            <div class="bm-combo-container" id="combo_t_start_rl">
+                <div class="bm-combo-wrapper">
+                    <input type="text" inputmode="decimal" id="t_start_rl" class="inp-bm bm-combo-input" placeholder="Select or type Starting BM" oninput="handleBMInput('t_start_rl', 'saveTraverseDraft')" onfocus="showBMDropdown('combo_t_start_rl')" autocomplete=           border-collapse: collapse;
             font-size: 18px;
             white-space: nowrap;
         }
