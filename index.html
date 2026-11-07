@@ -1029,18 +1029,33 @@
                 if (draft.closeBm) document.getElementById('t_close_bm').value = draft.closeBm;
             } catch(e) {}
         }
-
+        function getNextStationName(current) {
+            const match = current.match(/^(.*?)(\d+)$/);
+            if (match) {
+                const prefix = match[1];
+                const numStr = match[2];
+                const nextNum = parseInt(numStr, 10) + 1;
+                // Preserves leading zeros if any (e.g., 01 -> 02)
+                const paddedNum = String(nextNum).padStart(numStr.length, '0');
+                return prefix + paddedNum;
+            }
+            return current; // Fallback if there's no trailing number
+        }
         function addTraverseRow() {
-            const stn = document.getElementById('t_stn').value.trim();
+            const stnInput = document.getElementById('t_stn');
+            const stn = stnInput.value.trim();
             const bs = parseFloat(document.getElementById('t_bs').value);
             const isVal = parseFloat(document.getElementById('t_is').value);
             const fsVal = parseFloat(document.getElementById('t_fs').value);
-
+        
             if (!stn) {
                 alert('Please enter a station name.');
                 return;
             }
-
+        
+            // Capture the next incremented station name before resetting readings
+            const nextStn = getNextStationName(stn);
+        
             const tableBody = document.querySelector('#traverseTable tbody');
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -1054,8 +1069,9 @@
                 <td>-</td>
             `;
             tableBody.appendChild(row);
-
-            document.getElementById('t_stn').value = '';
+        
+            // Auto-fill next station name and clear reading inputs
+            stnInput.value = nextStn;
             document.getElementById('t_bs').value = '';
             document.getElementById('t_is').value = '';
             document.getElementById('t_fs').value = '';
