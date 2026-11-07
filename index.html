@@ -1075,42 +1075,64 @@
                 alert('Please enter the known closing benchmark RL.');
                 return;
             }
-
+        
             const rows = [...document.querySelectorAll('#traverseTable tbody tr')];
             if (rows.length === 0) {
                 document.getElementById('t_error_display').textContent = 'No traverse rows to close.';
                 return;
             }
-
+        
             const startRl = parseFloat(document.getElementById('t_start_rl').value);
             if (isNaN(startRl)) {
                 alert('Please select or type the starting benchmark RL.');
                 return;
             }
-
+        
             let currentHi = startRl;
-            let totalError = 0;
-            rows.forEach((row, index) => {
+            
+            // Pass 1: Calculate raw HOC and unadjusted RLs
+            rows.forEach((row) => {
                 const cells = row.children;
                 const bs = parseFloat(cells[1].textContent);
                 const isVal = parseFloat(cells[2].textContent);
                 const fsVal = parseFloat(cells[3].textContent);
-
+        
                 if (!isNaN(bs)) currentHi += bs;
                 if (!isNaN(isVal)) {
-                    cells[4].textContent = currentHi.toFixed(3);
-                    cells[5].textContent = (currentHi - isVal).toFixed(3);
+                    cells[4].textContent = currentHi.toFixed(3); // HOC
+                    cells[5].textContent = (currentHi - isVal).toFixed(3); // RL
                 }
                 if (!isNaN(fsVal)) {
-                    const nextHi = currentHi - fsVal;
-                    cells[4].textContent = currentHi.toFixed(3);
-                    cells[5].textContent = (currentHi - fsVal).toFixed(3);
-                    currentHi = nextHi;
+                    cells[4].textContent = currentHi.toFixed(3); // HOC
+                    cells[5].textContent = (currentHi - fsVal).toFixed(3); // RL
+                    currentHi = (currentHi - fsVal); // Update HI for next setup
                 }
             });
-
-            totalError = currentHi - closingBm;
+        
+            // Calculate total misclosure error
+            const totalError = currentHi - closingBm;
             document.getElementById('t_error_display').textContent = `Misclosure = ${totalError.toFixed(3)} m`;
+        
+            // Pass 2: Distribute error and calculate Adjusted RLs (Corr & Adj RL)
+            // Note: Assuming a simple proportional distribution by number of instrument setups (rows with FS/BS)
+            const totalSetups = rows.filter(r => !isNaN(parseFloat(r.children[3].textContent))).length || rows.length;
+            let cumulativeCorrection = 0;
+        
+            rows.forEach((row, index) => {
+                const cells = row.children;
+                const rawRl = parseFloat(cells[5].textContent);
+        
+                if (!isNaN(rawRl)) {
+                    // Proportional error distribution per setup/station
+                    // Correction is typically applied with opposite sign: - (Error * step / totalSteps)
+                    const correction = - (totalError * ((index + 1) / rows.length));
+                    const adjRl = rawRl + correction;
+        
+                    cells[6].textContent = correction.toFixed(3);       // Corr column
+                    cells[7].textContent = adjRl.toFixed(3);            // Adj RL column
+                }
+            });
+        
             document.getElementById('download_excel_btn').style.display = 'block';
             saveTraverseDraft();
         }
