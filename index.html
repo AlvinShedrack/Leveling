@@ -1113,13 +1113,21 @@
                 const isVal = parseFloat(cells[2].textContent);
                 const fsVal = parseFloat(cells[3].textContent);
         
-                if (!isNaN(bs)) currentHi += bs;
+                // Reset HOC cell for this row initially
+                cells[4].textContent = '-';
+                cells[5].textContent = '-';
+        
+                if (!isNaN(bs)) {
+                    currentHi += bs;
+                    // HOC belongs to the line of BS
+                    cells[4].textContent = currentHi.toFixed(3);
+                }
+        
                 if (!isNaN(isVal)) {
-                    cells[4].textContent = currentHi.toFixed(3); // HOC
                     cells[5].textContent = (currentHi - isVal).toFixed(3); // RL
                 }
+        
                 if (!isNaN(fsVal)) {
-                    cells[4].textContent = currentHi.toFixed(3); // HOC
                     cells[5].textContent = (currentHi - fsVal).toFixed(3); // RL
                     currentHi = (currentHi - fsVal); // Update HI for next setup
                 }
@@ -1130,9 +1138,7 @@
             document.getElementById('t_error_display').textContent = `Misclosure = ${totalError.toFixed(3)} m`;
         
             // Pass 2: Distribute error and calculate Adjusted RLs (Corr & Adj RL)
-            // Note: Assuming a simple proportional distribution by number of instrument setups (rows with FS/BS)
-            const totalSetups = rows.filter(r => !isNaN(parseFloat(r.children[3].textContent))).length || rows.length;
-            let cumulativeCorrection = 0;
+            const totalSetups = rows.filter(r => !isNaN(parseFloat(r.children[1].textContent))).length || rows.length;
         
             rows.forEach((row, index) => {
                 const cells = row.children;
@@ -1140,12 +1146,14 @@
         
                 if (!isNaN(rawRl)) {
                     // Proportional error distribution per setup/station
-                    // Correction is typically applied with opposite sign: - (Error * step / totalSteps)
                     const correction = - (totalError * ((index + 1) / rows.length));
                     const adjRl = rawRl + correction;
         
                     cells[6].textContent = correction.toFixed(3);       // Corr column
                     cells[7].textContent = adjRl.toFixed(3);            // Adj RL column
+                } else {
+                    cells[6].textContent = '-';
+                    cells[7].textContent = '-';
                 }
             });
         
