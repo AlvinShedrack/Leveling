@@ -1135,10 +1135,10 @@
                 }
             });
             
-            const totalSetups = setupIndices.length;
+            const totalSetups = setupIndices.length > 0 ? setupIndices.length : 1;
         
             // Step 2: Pass 1 - Calculate raw HOC and RLs
-            let currentSetupCounter = -1; // Starts at -1 so the first setup evaluates to step 0 (Correction = 0)
+            let currentSetupCounter = -1; // Starts at -1 so the first row (Opening BM) evaluates to step 0 (Correction = 0)
             rows.forEach((row, index) => {
                 const cells = row.children;
                 const bs = parseFloat(cells[1].textContent);
@@ -1180,9 +1180,7 @@
             const totalError = currentHi - closingBm;
             document.getElementById('t_error_display').textContent = `Misclosure = ${totalError.toFixed(3)} m`;
         
-            // Step 3: Pass 2 - Apply correction starting strictly from the 2nd setup onwards
-            const numCorrectionSteps = totalSetups > 1 ? totalSetups - 1 : 1;
-        
+            // Step 3: Pass 2 - Apply progressive correction (0 for opening BM, 1x/N for 1st station, 2x/N for 2nd, etc.)
             rows.forEach((row) => {
                 const cells = row.children;
                 const rawRl = parseFloat(cells[5].textContent);
@@ -1190,9 +1188,10 @@
         
                 if (!isNaN(rawRl)) {
                     let correction = 0;
-                    // 1st setup (setupStep 0) gets 0 correction. Subsequent setups scale proportionally.
+                    // setupStep 0 (Opening BM) gets 0 correction. 
+                    // Subsequent stations scale as step/totalSetups * error.
                     if (setupStep > 0) {
-                        correction = - (totalError * (setupStep / numCorrectionSteps));
+                        correction = - (totalError * (setupStep / totalSetups));
                     }
                     const adjRl = rawRl + correction;
         
