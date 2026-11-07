@@ -1126,8 +1126,7 @@
         
             let currentHi = startRl;
             
-            // Step 1: Identify all instrument setups (rows that have a BS reading)
-            // We count how many instrument set-ups (BS changes) occur in the traverse.
+            // Step 1: Count total instrument setups (rows that have a BS reading)
             let setupIndices = [];
             rows.forEach((row, index) => {
                 const bs = parseFloat(row.children[1].textContent);
@@ -1149,14 +1148,17 @@
                 cells[4].textContent = '-'; // HOC
                 cells[5].textContent = '-'; // RL
         
+                // Special handling for the very first row (Starting Benchmark row)
+                if (index === 0) {
+                    cells[5].textContent = startRl.toFixed(3);
+                }
+        
                 if (!isNaN(bs)) {
                     currentHi += bs;
                     cells[4].textContent = currentHi.toFixed(3); // HOC on BS line
                     currentSetupCounter++;
-                    // Tag the row with its setup index for error distribution
                     row.dataset.setupIndex = currentSetupCounter;
                 } else {
-                    // Inherit setup index from previous row if it's an IS on the same setup
                     if (index > 0) {
                         row.dataset.setupIndex = rows[index - 1].dataset.setupIndex || 1;
                     } else {
@@ -1174,19 +1176,17 @@
                 }
             });
         
-            // Calculate total misclosure error (Calculated Closing RL - Known Closing BM)
+            // Calculate total misclosure error
             const totalError = currentHi - closingBm;
             document.getElementById('t_error_display').textContent = `Misclosure = ${totalError.toFixed(3)} m`;
         
-            // Step 3: Pass 2 - Apply cumulative proportional correction per setup
-            // Formula: Correction = - (Error * setupIndex / totalSetups)
+            // Step 3: Pass 2 - Apply cumulative proportional correction per setup (1x/N, 2x/N, etc.)
             rows.forEach((row) => {
                 const cells = row.children;
                 const rawRl = parseFloat(cells[5].textContent);
                 const setupIdx = parseInt(row.dataset.setupIndex) || 1;
         
                 if (!isNaN(rawRl)) {
-                    // Correction increases proportionally with each instrument setup: 1x/N, 2x/N, etc.
                     const correction = - (totalError * (setupIdx / totalSetups));
                     const adjRl = rawRl + correction;
         
