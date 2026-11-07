@@ -1126,21 +1126,42 @@
         
             let currentHi = startRl;
             
-            // Pass 1: Calculate raw HOC and unadjusted RLs
-            rows.forEach((row) => {
+            // Step 1: Identify all instrument setups (rows that have a BS reading)
+            // We count how many instrument set-ups (BS changes) occur in the traverse.
+            let setupIndices = [];
+            rows.forEach((row, index) => {
+                const bs = parseFloat(row.children[1].textContent);
+                if (!isNaN(bs)) {
+                    setupIndices.push(index);
+                }
+            });
+            
+            const totalSetups = setupIndices.length > 0 ? setupIndices.length : 1;
+        
+            // Step 2: Pass 1 - Calculate raw HOC and RLs
+            let currentSetupCounter = 0;
+            rows.forEach((row, index) => {
                 const cells = row.children;
                 const bs = parseFloat(cells[1].textContent);
                 const isVal = parseFloat(cells[2].textContent);
                 const fsVal = parseFloat(cells[3].textContent);
         
-                // Reset HOC cell for this row initially
-                cells[4].textContent = '-';
-                cells[5].textContent = '-';
+                cells[4].textContent = '-'; // HOC
+                cells[5].textContent = '-'; // RL
         
                 if (!isNaN(bs)) {
                     currentHi += bs;
-                    // HOC belongs to the line of BS
-                    cells[4].textContent = currentHi.toFixed(3);
+                    cells[4].textContent = currentHi.toFixed(3); // HOC on BS line
+                    currentSetupCounter++;
+                    // Tag the row with its setup index for error distribution
+                    row.dataset.setupIndex = currentSetupCounter;
+                } else {
+                    // Inherit setup index from previous row if it's an IS on the same setup
+                    if (index > 0) {
+                        row.dataset.setupIndex = rows[index - 1].dataset.setupIndex || 1;
+                    } else {
+                        row.dataset.setupIndex = 1;
+                    }
                 }
         
                 if (!isNaN(isVal)) {
@@ -1153,24 +1174,24 @@
                 }
             });
         
-            // Calculate total misclosure error
+            // Calculate total misclosure error (Calculated Closing RL - Known Closing BM)
             const totalError = currentHi - closingBm;
             document.getElementById('t_error_display').textContent = `Misclosure = ${totalError.toFixed(3)} m`;
         
-            // Pass 2: Distribute error and calculate Adjusted RLs (Corr & Adj RL)
-            const totalSetups = rows.filter(r => !isNaN(parseFloat(r.children[1].textContent))).length || rows.length;
-        
-            rows.forEach((row, index) => {
+            // Step 3: Pass 2 - Apply cumulative proportional correction per setup
+            // Formula: Correction = - (Error * setupIndex / totalSetups)
+            rows.forEach((row) => {
                 const cells = row.children;
                 const rawRl = parseFloat(cells[5].textContent);
+                const setupIdx = parseInt(row.dataset.setupIndex) || 1;
         
                 if (!isNaN(rawRl)) {
-                    // Proportional error distribution per setup/station
-                    const correction = - (totalError * ((index + 1) / rows.length));
+                    // Correction increases proportionally with each instrument setup: 1x/N, 2x/N, etc.
+                    const correction = - (totalError * (setupIdx / totalSetups));
                     const adjRl = rawRl + correction;
         
-                    cells[6].textContent = correction.toFixed(3);       // Corr column
-                    cells[7].textContent = adjRl.toFixed(3);            // Adj RL column
+                    cells[6].textContent = correction.toFixed(3); // Corr
+                    cells[7].textContent = adjRl.toFixed(3);      // Adj RL
                 } else {
                     cells[6].textContent = '-';
                     cells[7].textContent = '-';
@@ -1180,7 +1201,6 @@
             document.getElementById('download_excel_btn').style.display = 'block';
             saveTraverseDraft();
         }
-
         function downloadTraverseExcel() {
             const rows = [...document.querySelectorAll('#traverseTable tbody tr')];
             if (rows.length === 0) return;
