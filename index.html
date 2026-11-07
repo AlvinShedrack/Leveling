@@ -530,6 +530,26 @@
             bottom: 0;
             z-index: 100;
         }
+        .btn-close-traverse {
+            background: rgba(105, 240, 174, 0.1);
+            color: var(--success);
+            border: 2px solid var(--success);
+            padding: 14px 20px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .btn-close-traverse:hover {
+            background: rgba(105, 240, 174, 0.25);
+        }
+
+        .btn-close-traverse:active {
+            transform: scale(0.98);
+        }
     </style>
     <!-- Excel export library -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
