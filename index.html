@@ -1126,7 +1126,7 @@
         
             let currentHi = startRl;
             
-            // Step 1: Count total instrument setups (rows that have a BS reading)
+            // Step 1: Identify all instrument setups (rows that have a BS reading)
             let setupIndices = [];
             rows.forEach((row, index) => {
                 const bs = parseFloat(row.children[1].textContent);
@@ -1135,10 +1135,10 @@
                 }
             });
             
-            const totalSetups = setupIndices.length > 0 ? setupIndices.length : 1;
+            const totalSetups = setupIndices.length;
         
             // Step 2: Pass 1 - Calculate raw HOC and RLs
-            let currentSetupCounter = 0;
+            let currentSetupCounter = -1; // Starts at -1 so the first setup evaluates to step 0 (Correction = 0)
             rows.forEach((row, index) => {
                 const cells = row.children;
                 const bs = parseFloat(cells[1].textContent);
@@ -1148,7 +1148,7 @@
                 cells[4].textContent = '-'; // HOC
                 cells[5].textContent = '-'; // RL
         
-                // Special handling for the very first row (Starting Benchmark row)
+                // Display RL on the starting benchmark row
                 if (index === 0) {
                     cells[5].textContent = startRl.toFixed(3);
                 }
@@ -1157,12 +1157,12 @@
                     currentHi += bs;
                     cells[4].textContent = currentHi.toFixed(3); // HOC on BS line
                     currentSetupCounter++;
-                    row.dataset.setupIndex = currentSetupCounter;
+                    row.dataset.setupStep = currentSetupCounter;
                 } else {
                     if (index > 0) {
-                        row.dataset.setupIndex = rows[index - 1].dataset.setupIndex || 1;
+                        row.dataset.setupStep = rows[index - 1].dataset.setupStep || 0;
                     } else {
-                        row.dataset.setupIndex = 1;
+                        row.dataset.setupStep = 0;
                     }
                 }
         
@@ -1180,14 +1180,20 @@
             const totalError = currentHi - closingBm;
             document.getElementById('t_error_display').textContent = `Misclosure = ${totalError.toFixed(3)} m`;
         
-            // Step 3: Pass 2 - Apply cumulative proportional correction per setup (1x/N, 2x/N, etc.)
+            // Step 3: Pass 2 - Apply correction starting strictly from the 2nd setup onwards
+            const numCorrectionSteps = totalSetups > 1 ? totalSetups - 1 : 1;
+        
             rows.forEach((row) => {
                 const cells = row.children;
                 const rawRl = parseFloat(cells[5].textContent);
-                const setupIdx = parseInt(row.dataset.setupIndex) || 1;
+                const setupStep = parseInt(row.dataset.setupStep) || 0;
         
                 if (!isNaN(rawRl)) {
-                    const correction = - (totalError * (setupIdx / totalSetups));
+                    let correction = 0;
+                    // 1st setup (setupStep 0) gets 0 correction. Subsequent setups scale proportionally.
+                    if (setupStep > 0) {
+                        correction = - (totalError * (setupStep / numCorrectionSteps));
+                    }
                     const adjRl = rawRl + correction;
         
                     cells[6].textContent = correction.toFixed(3); // Corr
